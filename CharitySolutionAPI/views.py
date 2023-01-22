@@ -3,7 +3,7 @@ from django.shortcuts import render
 from CharitySolutionAPI.models import Person
 
 
-def start(request):
+def homepage(request):
     tom = Person(name="Test", age=23)
     tom.save()
     saved_tom = Person.objects.all()
