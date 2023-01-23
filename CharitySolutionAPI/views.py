@@ -8,10 +8,13 @@ def homepage(request):
 
 
 def save_user_info(request):
-    user = Person(name=request.POST.get("name"),
-                  age=request.POST.get("age"))
-    user.save()
-    return redirect('/')
+    try:
+        user = Person(name=request.POST.get("name"),
+                      age=request.POST.get("age"))
+        user.save()
+    except ValueError:
+        return redirect('/error')
+    return redirect('/get_users_list')
 
 
 def registration(request):
