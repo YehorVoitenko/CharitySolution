@@ -3,20 +3,27 @@ from django.contrib.auth import authenticate, login
 from CharitySolutionAPI.models import Person
 
 
-def homepage(request):
+def user_list(request):
     person_data = Person.objects.all()[::-1]
-    return render(request, 'index.html', context={'context': person_data})
+    return render(request, 'user_list.html', context={'context': person_data})
 
 
 def save_user_info(request):
-    user = Person(name=request.POST.get("name"),
-                  age=request.POST.get("age"))
-    user.save()
-    return redirect('/')
+    try:
+        user = Person(name=request.POST.get("name"),
+                      age=request.POST.get("age"))
+        user.save()
+    except ValueError:
+        return redirect('/error')
+    return redirect('/get_users_list')
 
 
 def registration(request):
-    return render(request, 'post_info.html')
+    return render(request, 'registration.html')
+
+
+def error(request):
+    return render(request, 'error.html')
 
 
 def login_user(request):
