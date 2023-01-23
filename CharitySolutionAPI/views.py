@@ -15,4 +15,8 @@ def save_user_info(request):
 
 
 def registration(request):
-    return render(request, 'post_info.html')
+    return render(request, 'registration.html')
+
+
+def error(request):
+    return render(request, 'error.html')
