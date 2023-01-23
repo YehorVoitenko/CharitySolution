@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>{% block title %} Registration{% endblock %}</title>
     <style>
-      #example {
+      #registration_form {
         top: 15%;
         width: 100%;
         position: fixed;
@@ -15,8 +15,8 @@
 </head>
 <body>
 
-<div align="center"  id="example">
-    <form method="post" action="get_user_info/">
+<div align="center"  id="registration_form">
+    <form method="post" action="save_user_info/">
         {% csrf_token %}
       <div class="form-group">
           <label><b>Name</b></label>

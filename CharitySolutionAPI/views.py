@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from CharitySolutionAPI.models import Person
 
 
-def homepage(request):
+def user_list(request):
     person_data = Person.objects.all()[::-1]
-    return render(request, 'index.html', context={'context': person_data})
+    return render(request, 'user_list.html', context={'context': person_data})
 
 
 def save_user_info(request):
