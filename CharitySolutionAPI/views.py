@@ -3,27 +3,28 @@ from django.contrib.auth import authenticate, login, logout
 from CharitySolutionAPI.models import Person
 
 
-def user_list(request):
+def items_list(request):
     if request.user.is_authenticated:
         person_data = Person.objects.all()[::-1]
-        return render(request, 'user_list.html', context={'context': person_data})
+        return render(request, 'items_list.html', context={'context': person_data})
     else:
         return redirect('/error')
 
 
-def save_user_info(request):
+def save_item_info(request):
     try:
-        user = Person(name=request.POST.get("name"),
-                      age=request.POST.get("age"))
-        user.save()
+        if request.method == 'POST':
+            user = Person(name=request.POST.get("name"),
+                          age=request.POST.get("age"))
+            user.save()
     except ValueError:
         return redirect('/error')
-    return redirect('/get_users_list')
+    return redirect('/get_items_list')
 
 
-def registration(request):
+def add_item(request):
     if request.user.is_authenticated:
-        return render(request, 'registration.html')
+        return render(request, 'add_item.html')
     else:
         return redirect('/error')
 
@@ -39,7 +40,7 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/get_users_list')
+            return redirect('/get_items_list')
         else:
             return redirect('/error')
     else:
@@ -48,4 +49,4 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('/login_member')
+    return redirect('/login_user')
