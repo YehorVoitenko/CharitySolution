@@ -12,11 +12,17 @@
 <br>
     <div align="center">
         <div class="alert alert-danger col-md-4 col-md-offset-4" role="alert">
-            <h2>Hey, you have <b>empty value</b>....wrong, wrong</h2>
+            <h2><b>ERROR ERROR ERROR</b></h2>
         </div>
+        {%  if user.is_authenticated %}
         <form method="get" action="/registration" >
-            <button type="submit" class="btn btn-secondary">Go Back</button>
+            <button type="submit" class="btn btn-secondary">Go back</button>
         </form>
+            {% else %}
+            <form method="get" action="/login_member" >
+                <button type="submit" class="btn btn-secondary">Go to LogIn</button>
+            </form>
+        {% endif %}
     </div>
 </body>
 </html>
