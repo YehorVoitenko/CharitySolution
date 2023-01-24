@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from CharitySolutionAPI.models import Person
 
 
 def user_list(request):
-    person_data = Person.objects.all()[::-1]
-    return render(request, 'user_list.html', context={'context': person_data})
+    if request.user.is_authenticated:
+        person_data = Person.objects.all()[::-1]
+        return render(request, 'user_list.html', context={'context': person_data})
+    else:
+        return redirect('/error')
 
 
 def save_user_info(request):
@@ -19,7 +22,10 @@ def save_user_info(request):
 
 
 def registration(request):
-    return render(request, 'registration.html')
+    if request.user.is_authenticated:
+        return render(request, 'registration.html')
+    else:
+        return redirect('/error')
 
 
 def error(request):
@@ -27,16 +33,19 @@ def error(request):
 
 
 def login_user(request):
-    if request.method['POST']:
+    if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('')
-            ...
+            return redirect('/get_users_list')
         else:
-            # Return an 'invalid login' error message.
-            ...
+            return redirect('/error')
     else:
         return render(request, 'login.html')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('/login_member')
