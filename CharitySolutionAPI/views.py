@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from CharitySolutionAPI.models import Person
+from CharitySolutionAPI.models import Person, UsersPost
 
 
 def items_list(request):
@@ -50,3 +50,13 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('/login_user')
+
+
+def create_post(request):
+    if request.method == "POST":
+        file2 = request.FILES["file"]
+        document = UsersPost.objects.create(post_title=request.POST.get('post_title'),
+                                            post_text=request.POST.get('post_text'),
+                                            file=file2)
+        document.save()
+    return render(request, 'create_post.html')
