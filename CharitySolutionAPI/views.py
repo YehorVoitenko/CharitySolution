@@ -22,7 +22,7 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/get_items_list')
+            return redirect('/get_posts_list')
         else:
             return redirect('/error')
     else:
@@ -35,10 +35,12 @@ def logout_user(request):
 
 
 def create_post(request):
-    if request.method == "POST":
-        file2 = request.FILES["file"]
-        document = UsersPost.objects.create(post_title=request.POST.get('post_title'),
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            post = UsersPost.objects.create(post_title=request.POST.get('post_title'),
                                             post_text=request.POST.get('post_text'),
-                                            file=file2)
-        document.save()
-    return render(request, 'create_post.html')
+                                            file=request.FILES.get("file", False))
+            post.save()
+        return render(request, 'create_post.html')
+    else:
+        return redirect('/error')
