@@ -1,30 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from CharitySolutionAPI.models import Person, UsersPost
+from CharitySolutionAPI.models import UsersPost
 
 
-def items_list(request):
+def posts_list(request):
     if request.user.is_authenticated:
-        person_data = Person.objects.all()[::-1]
-        return render(request, 'items_list.html', context={'context': person_data})
-    else:
-        return redirect('/error')
-
-
-def save_item_info(request):
-    try:
-        if request.method == 'POST':
-            user = Person(name=request.POST.get("name"),
-                          age=request.POST.get("age"))
-            user.save()
-    except ValueError:
-        return redirect('/error')
-    return redirect('/get_items_list')
-
-
-def add_item(request):
-    if request.user.is_authenticated:
-        return render(request, 'add_item.html')
+        post_data = UsersPost.objects.all()[::-1]
+        return render(request, 'posts_list.html', context={'context': post_data})
     else:
         return redirect('/error')
 
