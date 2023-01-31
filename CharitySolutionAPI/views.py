@@ -41,6 +41,7 @@ def create_post(request):
                                             post_text=request.POST.get('post_text'),
                                             file=request.FILES.get("file", False))
             post.save()
+            return redirect('/get_posts_list')
         return render(request, 'create_post.html')
     else:
         return redirect('/error')

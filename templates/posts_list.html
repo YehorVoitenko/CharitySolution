@@ -22,10 +22,13 @@
 
 {% for post in context %}
     <div align="center">
-
-        <h2>{{ post.post_title }}</h2><br>
-            {{ post.post_text }}<br>
-        <img src="{{ post.file.url }}" id="image" width="15%" height="15%">
+        <h2>{{ post.post_title.capitalize }}</h2><br>
+            {{ post.post_text.capitalize }}<br>
+        {% if '.png' in post.file.url or '.jpeg' in post.file.url%}
+            <img src="{{ post.file.url }}" id="image" width="15%" height="15%">
+        {% elif '.pdf' in post.file.url %}
+            <h5>Організація додала файл - встановити можна за <a href="{{post.file.url}}" download> посиланням</a></h5>
+        {% endif %}
     </div>
     <div align="center">
         {{ post.date_created }} <br>
