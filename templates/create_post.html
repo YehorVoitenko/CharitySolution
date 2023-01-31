@@ -15,18 +15,25 @@
 </head>
 
 <body>
+<br>
+    <div align="right">
+        <form method="get" action="/get_posts_list">
+            <button type="submit" class="btn btn-primary" id="button">Show posts</button>
+        </form>
+        <br>
+    </div>
 
-<div align="center" id="add_item_form">
-     <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-         <input class="form-control form-control-lg col-md-3" type="text" placeholder="Here your post title..." aria-label=".form-control-lg example" name="post_title">
-         <br>
-         <textarea class="form-control col-md-3" name="post_text" rows="4" cols="10" placeholder="Write your post..."></textarea>
-         <br><br>
-         <input type="file" name="file">
-         <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
+    <div align="center" id="add_item_form">
+         <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+             <input class="form-control form-control-lg col-md-3" type="text" placeholder="Here your post title..." aria-label=".form-control-lg example" name="post_title">
+             <br>
+             <textarea class="form-control col-md-3" name="post_text" rows="4" cols="10" placeholder="Write your post..."></textarea>
+             <br><br>
+             <input type="file" name="file">
+             <input type="submit" class="btn btn-primary">
+        </form>
+    </div>
 
 </body>
 </html>
