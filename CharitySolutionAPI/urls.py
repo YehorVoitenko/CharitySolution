@@ -10,5 +10,6 @@ urlpatterns = [
     path('login_user/', views.login_user, name='login_user'),
     path('logout_user/', views.logout_user, name='logout_user'),
     path('create_post/', views.create_post, name='create_post'),
+    path('', views.homepage, name='homepage')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

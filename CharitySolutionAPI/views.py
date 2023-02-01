@@ -51,3 +51,7 @@ def create_post(request):
         return render(request, 'create_post.html', {'form': form})
     else:
         return redirect('/error')
+
+
+def homepage(request):
+    return render(request, 'home_page.html')
