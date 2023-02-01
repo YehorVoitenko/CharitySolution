@@ -8,7 +8,9 @@ from CharitySolutionAPI.models import UsersPost
 def posts_list(request):
     if request.user.is_authenticated:
         post_data = UsersPost.objects.all()[::-1]
-        return render(request, 'posts_list.html', context={'context': post_data})
+        return render(request, 'posts_list.html', context={
+            'context': post_data
+        })
     else:
         return redirect('/error')
 
@@ -21,7 +23,9 @@ def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request,
+                            username=username,
+                            password=password)
         if user is not None:
             login(request, user)
             return redirect('/get_posts_list')
@@ -38,7 +42,6 @@ def logout_user(request):
 
 def create_post(request):
     if request.user.is_authenticated:
-
         if request.method == "POST":
             form = UsersPostForm(request.POST, request.FILES)
             if form.is_valid():
