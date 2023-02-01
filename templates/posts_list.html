@@ -19,23 +19,28 @@
     </form>
 </div>
 <br>
+{% if context%}
 
-{% for post in context %}
+    {% for post in context %}
+        <div align="center">
+            <h2>{{ post.post_title.capitalize }}</h2><br>
+                {{ post.post_text.capitalize }}<br>
+            {% if '.png' in post.file.url or '.jpeg' in post.file.url%}
+                <img src="{{ post.file.url }}" id="image" width="15%" height="15%">
+            {% elif '.pdf' in post.file.url %}
+                <h5>Організація додала файл - встановити можна за <a href="{{post.file.url}}" download> посиланням</a></h5>
+            {% endif %}
+        </div>
+        <div align="center">
+            {{ post.date_created }} <br>
+        </div>
+        <hr>
+    {% endfor %}
+
+{% else %}
     <div align="center">
-        <h2>{{ post.post_title.capitalize }}</h2><br>
-            {{ post.post_text.capitalize }}<br>
-        {% if '.png' in post.file.url or '.jpeg' in post.file.url%}
-            <img src="{{ post.file.url }}" id="image" width="15%" height="15%">
-        {% elif '.pdf' in post.file.url %}
-            <h5>Організація додала файл - встановити можна за <a href="{{post.file.url}}" download> посиланням</a></h5>
-        {% endif %}
+        <h3>Unfortunately, we don't have posts, so you can <a href="{% url 'create_post' %}"> create it)</a></h3>
     </div>
-    <div align="center">
-        {{ post.date_created }} <br>
-    </div>
-
-    <hr>
-{% endfor %}
-
+{% endif %}
 </body>
 </html>

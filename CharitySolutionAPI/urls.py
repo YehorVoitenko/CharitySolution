@@ -9,6 +9,6 @@ urlpatterns = [
     path('error/', views.error),
     path('login_user/', views.login_user),
     path('logout_user/', views.logout_user),
-    path('create_post/', views.create_post),
+    path('create_post/', views.create_post, name='create_post'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

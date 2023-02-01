@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+
+from CharitySolutionAPI.forms import UsersPostForm
 from CharitySolutionAPI.models import UsersPost
 
 
@@ -36,12 +38,13 @@ def logout_user(request):
 
 def create_post(request):
     if request.user.is_authenticated:
+
         if request.method == "POST":
-            post = UsersPost.objects.create(post_title=request.POST.get('post_title'),
-                                            post_text=request.POST.get('post_text'),
-                                            file=request.FILES.get("file", False))
-            post.save()
+            form = UsersPostForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
             return redirect('/get_posts_list')
-        return render(request, 'create_post.html')
+        form = UsersPostForm()
+        return render(request, 'create_post.html', {'form': form})
     else:
         return redirect('/error')

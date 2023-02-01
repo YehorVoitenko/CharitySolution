@@ -26,11 +26,11 @@
     <div align="center" id="add_item_form">
          <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-             <input class="form-control form-control-lg col-md-3" type="text" placeholder="Here your post title..." aria-label=".form-control-lg example" name="post_title">
+             {{ form.post_title }}
              <br>
-             <textarea class="form-control col-md-3" name="post_text" rows="4" cols="10" placeholder="Write your post..."></textarea>
+             {{ form.post_text }}
              <br><br>
-             <input type="file" name="file">
+             {{ form.file }}
              <input type="submit" class="btn btn-primary">
         </form>
     </div>
