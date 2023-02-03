@@ -35,6 +35,9 @@
         <a class="nav-link" href="{% url 'create_post' %}">Add post</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="{% url '#' %}">Account</a>
+      </li>
+      <li class="nav-item">
           {% if request.user.is_authenticated %}
               <a class="nav-link" href="{% url 'logout_organisation' %}">LogOut</a>
           {% else %}
