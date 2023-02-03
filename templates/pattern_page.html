@@ -36,10 +36,10 @@
       </li>
       <li class="nav-item">
           {% if request.user.is_authenticated %}
-              <a class="nav-link" href="{% url 'logout_user' %}">LogOut</a>
+              <a class="nav-link" href="{% url 'logout_organisation' %}">LogOut</a>
           {% else %}
-          {% if not request.path == '/login_user/' %}
-              <a class="nav-link" href="{% url 'login_user' %}">LogIn</a>
+          {% if not request.path == '/login_organisation/' %}
+              <a class="nav-link" href="{% url 'login_organisation' %}">LogIn</a>
           {% endif %}
 
           {% endif %}

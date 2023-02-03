@@ -1,10 +1,10 @@
-from .models import UsersPost
+from .models import OrganisationPost
 from django.forms import ModelForm, TextInput, Textarea
 
 
-class UsersPostForm(ModelForm):
+class OrganisationPostForm(ModelForm):
     class Meta:
-        model = UsersPost
+        model = OrganisationPost
         fields = ["post_title", "post_text", "file"]
         widgets = {'post_text': Textarea(
             attrs={

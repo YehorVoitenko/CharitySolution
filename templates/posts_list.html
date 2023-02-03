@@ -4,32 +4,28 @@
 {% block content %}
 <br>
 {% if context %}
-<div class="container">
-    {% for post in context %}
-        <div align="center">
-            <h2>{{ post.post_title.capitalize }}</h2>
-        <div align="left">
-            <h6>{{ post.post_text.capitalize|wordwrap:100|linebreaks}}</h6>
-        </div>
-            {% if '.png' in post.file.url or '.jpeg' in post.file.url%}
-                <div align="right">
-                <img src="{{ post.file.url }}" id="image" width="15%" height="15%">
-                </div>
-            {% elif '.pdf' in post.file.url %}
-                <p>Організація додала файл - встановити можна за <a href="{{post.file.url}}" download><b>посиланням</b></a></p>
-            {% endif %}
-        </div>
-        <div align="center">
-            {{ post.date_created }} <br>
-        </div>
-        <hr>
-    {% endfor %}
+    <div class="container">
+        {% for post in context %}
+            <div align="center">
+                <h2>{{ post.post_title.capitalize }}</h2>
+            <div align="left">
+                <h6>{{ post.post_text.capitalize|wordwrap:100|linebreaks}}</h6>
+            </div>
+                {% if post.file%}
+                    <p>Організація додала файл - встановити можна за  <a href="{{post.file.url}}" download><b>посиланням</b></a></p>
+                {% endif %}
+            </div>
+            <div align="center">
+                {{ post.date_created }} <br>
+            </div>
+            <hr>
+        {% endfor %}
 
-{% else %}
-    <div align="center">
-        <h3>Unfortunately, we don't have posts, so you can <a href="{% url 'create_post' %}"> create it)</a></h3>
+    {% else %}
+        <div align="center">
+            <h3>Unfortunately, we don't have posts, so you can <a href="{% url 'create_post' %}"> create it)</a></h3>
+        </div>
     </div>
-</div>
 {% endif %}
 
 {% endblock %}
