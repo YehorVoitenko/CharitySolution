@@ -15,9 +15,15 @@
                     <p>Організація додала файл - встановити можна за  <a href="{{post.file.url}}" download><b>посиланням</b></a></p>
                 {% endif %}
             </div>
+
             <div align="center">
                 {{ post.date_created }}
+
+                {% if post.date_updated %}
+                    <p><i>edited</i></p>
+                {% endif %}
             </div>
+
             <hr>
         {% endfor %}
 

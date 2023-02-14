@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from CharitySolutionAPI.forms import OrganisationPostForm
 from CharitySolutionAPI.models import OrganisationPost, Organisation
+from datetime import datetime
 
 
 def posts_list(request):
@@ -74,8 +75,10 @@ def edit_post(request, post_id):
             instance = OrganisationPost.objects.get(id=post_id)
             form = OrganisationPostForm(request.POST, request.FILES, instance=instance)
             if form.is_valid():
-                form.save()
-            return redirect('/get_posts_list')
+                obj = form.save(commit=False)
+                obj.date_updated = datetime.now()
+                obj.save()
+                return redirect('/get_posts_list')
         post = OrganisationPost.objects.get(id=post_id)
 
         form = OrganisationPostForm(initial={'post_text': post.post_text, 'post_title': post.post_title})
