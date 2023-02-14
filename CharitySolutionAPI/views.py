@@ -1,8 +1,12 @@
+from django.db import IntegrityError
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from CharitySolutionAPI.forms import OrganisationPostForm
 from CharitySolutionAPI.models import OrganisationPost, Organisation
 from datetime import datetime
+from django.contrib.auth.models import User
 
 
 def posts_list(request):
@@ -24,8 +28,6 @@ def login_organisation(request):
                                     username=organisation_name,
                                     password=password)
         if organisation is not None:
-            organisation_info = Organisation(organisation_name=organisation_name)
-            organisation_info.save()
             login(request, organisation)
             return redirect('/get_posts_list')
         else:
@@ -87,3 +89,21 @@ def edit_post(request, post_id):
     else:
         return redirect('/error')
 
+
+def create_organisation(request):
+    if request.method == "POST":
+        try:
+            organisation_name = request.POST['organisation_name']
+            password = request.POST['password']
+            u = User(username=organisation_name)
+            Organisation.objects.create(organisation_name=organisation_name).save()
+            u.set_password(password)
+            u.is_superuser = True
+            u.is_staff = True
+            u.save()
+            login(request, authenticate(request, username=organisation_name, password=password))
+            return redirect('/get_posts_list')
+        except IntegrityError:
+            return HttpResponse("<div align='center'><h1>Sorry, this organisation is already exists</h1></div>")
+
+    return render(request, 'create_organisation.html')

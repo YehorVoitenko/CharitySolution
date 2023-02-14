@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Organisation(models.Model):
-    organisation_name = models.CharField(max_length=100)
+    organisation_name = models.CharField(max_length=100, unique=True)
 
 
 class OrganisationPost(models.Model):

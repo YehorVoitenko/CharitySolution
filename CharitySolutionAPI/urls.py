@@ -12,6 +12,7 @@ urlpatterns = [
     path('login_organisation/', views.login_organisation, name='login_organisation'),
     path('logout_organisation/', views.logout_organisation, name='logout_organisation'),
     path('create_post/', views.create_post, name='create_post'),
+    path('create_organisation/', views.create_organisation, name='create_organisation'),
     path('', views.homepage, name='homepage'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
