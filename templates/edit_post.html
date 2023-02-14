@@ -1,0 +1,24 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Edit post {% endblock %}
+
+{% block content %}
+
+        <div align="center">
+         <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if post.organisation_id == request.user.id %}
+                    {{ form.post_title}}
+                    <br>
+                    {{ form.post_text }}
+                    <br><br>
+                    {{ form.file }}
+                    <input type="submit" class="btn btn-primary">
+                {% else %}
+                    <h1>Sorry you don't have access</h1>
+                {% endif %}
+            </form>
+        </div>
+
+{% endblock %}
+

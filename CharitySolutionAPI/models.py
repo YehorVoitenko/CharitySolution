@@ -12,3 +12,5 @@ class OrganisationPost(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     file = models.FileField(null=True, blank=True)
 
+    def __str__(self):
+        return self.post_title

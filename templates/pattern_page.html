@@ -32,11 +32,13 @@
         <a class="nav-link" href="{% url 'get_posts_list' %}">Postline<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'create_post' %}">Add post</a>
+            <a class="nav-link" href="{% url 'create_post' %}">Add post</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url '#' %}">Account</a>
-      </li>
+        {% if not request.path == '/account/' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'account' %}">Account</a>
+          </li>
+        {% endif %}
       <li class="nav-item">
           {% if request.user.is_authenticated %}
               <a class="nav-link" href="{% url 'logout_organisation' %}">LogOut</a>

@@ -1,0 +1,24 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Account {% endblock %}
+
+{% block content %}
+    <br>
+    <div align="center">
+    <h2>Your name: {{ organisation.organisation_name }}</h2><br>
+    </div>
+    {% for post in organisation_posts %}
+        <div align="center">
+            <div class="alert alert-dark col-md-3" role="alert">
+                <h2>{{ post.post_title.capitalize }}</h2>
+                {{ post.post_text.capitalize }} <br><br>
+                {% if post.file %}
+                    <a href="{{ post.file.url }}" download><b>Your file</b></a>
+                {% endif %}<br>
+                    <a href="{% url 'edit_post' post_id=post.id %}" class="button">Edit</a>
+
+            </div>
+    {% endfor %}
+        </div>
+
+{% endblock %}

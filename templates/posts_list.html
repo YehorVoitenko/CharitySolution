@@ -17,9 +17,6 @@
             </div>
             <div align="center">
                 {{ post.date_created }}
-                {% if post.organisation.id == request.user.id %}
-                    <button type="button" class="btn btn-link">Edit</button>
-                {% endif %}
             </div>
             <hr>
         {% endfor %}
