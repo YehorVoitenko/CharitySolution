@@ -1,5 +1,3 @@
-from django.db import IntegrityError
-
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -7,10 +5,11 @@ from CharitySolutionAPI.forms import OrganisationPostForm
 from CharitySolutionAPI.models import OrganisationPost, Organisation
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 
 def posts_list(request):
-    post_data = OrganisationPost.objects.all()[::-1]
+    post_data = OrganisationPost.objects.all().order_by('-id')
     return render(request, 'posts_list.html', context={
         'context': post_data
     })
@@ -32,8 +31,7 @@ def login_organisation(request):
             return redirect('/get_posts_list')
         else:
             return redirect('/error')
-    else:
-        return render(request, 'login.html')
+    return render(request, 'login.html')
 
 
 def logout_organisation(request):
@@ -86,6 +84,16 @@ def edit_post(request, post_id):
         form = OrganisationPostForm(initial={'post_text': post.post_text, 'post_title': post.post_title})
 
         return render(request, 'edit_post.html', {'form': form, 'post': post})
+    else:
+        return redirect('/error')
+
+
+def delete_post(request, post_id):
+    if request.user.is_authenticated:
+        post = OrganisationPost.objects.get(id=post_id)
+        if post.organisation_id == request.user.id:
+            OrganisationPost.objects.get(id=post_id).delete()
+            return redirect('/get_posts_list')
     else:
         return redirect('/error')
 
