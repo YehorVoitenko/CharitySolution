@@ -6,7 +6,9 @@
     <br>
     <div align="center">
     <h2>Your name: {{ organisation.organisation_name }}</h2><br>
-    </div>
+        <a href="{% url 'edit_organisation_account' organisation_id=request.user.id %}" class="button">Edit account</a>
+    </div><br>
+
     {% for post in organisation_posts %}
         <div align="center">
             <div class="alert alert-dark col-md-3" role="alert">
