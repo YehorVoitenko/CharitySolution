@@ -4,22 +4,23 @@
 
 {% block content %}
     <br>
-    <div align="center" >
+    <div align="center">
     <h2>Your name: {{ organisation.organisation_name }}</h2><br>
-    </div>
+        <a href="{% url 'edit_organisation_account' organisation_id=request.user.id %}" class="button">Edit account</a>
+    </div><br>
     {% if organisation_posts %}
-        {% for post in organisation_posts %}
-            <div align="center" >
-                <div class="alert alert-dark col-md-3" role="alert">
-                    <h2>{{ post.post_title.capitalize }}</h2>
-                    {{ post.post_text.capitalize }} <br><br>
-                    {% if post.file %}
-                        <a href="{{ post.file.url }}" download><b>Your file</b></a>
-                    {% endif %}<br>
-                        <a href="{% url 'edit_post' post_id=post.id %}" class="button">Edit</a>
-                        <a>&emsp;&emsp;&emsp;<a href="{% url 'delete_post' post_id=post.id %}" class="button">Delete</a></a>
-                </div>
+    {% for post in organisation_posts %}
+        <div align="center">
+            <div class="alert alert-dark col-md-3" role="alert">
+                <h2>{{ post.post_title.capitalize }}</h2>
+                {{ post.post_text.capitalize }} <br><br>
+                {% if post.file %}
+                    <a href="{{ post.file.url }}" download><b>Your file</b></a>
+                {% endif %}<br>
+                    <a href="{% url 'edit_post' post_id=post.id %}" class="button">Edit</a>
+                    <a>&emsp;&emsp;&emsp;<a href="{% url 'delete_post' post_id=post.id %}" class="button">Delete</a></a>
             </div>
+        </div>
         {% endfor %}
     {% else %}
         <div align="center">

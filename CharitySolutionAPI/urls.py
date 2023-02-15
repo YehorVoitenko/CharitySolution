@@ -14,6 +14,7 @@ urlpatterns = [
     path('logout_organisation/', views.logout_organisation, name='logout_organisation'),
     path('create_post/', views.create_post, name='create_post'),
     path('create_organisation/', views.create_organisation, name='create_organisation'),
+    path('edit_organisation_account/<int:organisation_id>', views.edit_organisation_account,
+         name='edit_organisation_account'),
     path('', views.homepage, name='homepage'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

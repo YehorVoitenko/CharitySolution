@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from CharitySolutionAPI.forms import OrganisationPostForm
+from CharitySolutionAPI.forms import OrganisationPostForm, OrganisationForm
 from CharitySolutionAPI.models import OrganisationPost, Organisation
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -31,7 +31,8 @@ def login_organisation(request):
             return redirect('/get_posts_list')
         else:
             return redirect('/error')
-    return render(request, 'login.html')
+    else:
+        return render(request, 'login.html')
 
 
 def logout_organisation(request):
@@ -57,6 +58,36 @@ def create_post(request):
 
 def homepage(request):
     return render(request, 'home_page.html')
+
+
+def edit_organisation_account(request, organisation_id):
+    if request.user.is_authenticated and organisation_id == request.user.id:
+        organisation_info = Organisation.objects.get(id=organisation_id)
+
+        if request.method == "POST":
+            form = OrganisationForm(request.POST, request.FILES, instance=organisation_info)
+            if form.is_valid():
+                form.save()
+                return redirect('/get_posts_list')
+
+        initial = {
+            'organisation_name': organisation_info.organisation_name,
+            'organisation_description': organisation_info.organisation_description,
+            'city': organisation_info.city,
+            'email': organisation_info.email,
+            'telegram_nick': organisation_info.telegram_nick,
+            'instagram_nick': organisation_info.instagram_nick,
+            'organisation_site_url': organisation_info.organisation_site_url,
+        }
+        form = OrganisationForm(initial=initial)
+
+        return render(request, 'edit_organisation_account.html', {
+            'form': form,
+            'organisation_info': organisation_info
+            }
+                      )
+    else:
+        return redirect('/error')
 
 
 def account(request):
