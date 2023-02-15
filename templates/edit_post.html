@@ -3,8 +3,7 @@
 {% block title %} Edit post {% endblock %}
 
 {% block content %}
-
-        <div align="center">
+        <div align="center" id="center_form">
          <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% if post.organisation_id == request.user.id %}
