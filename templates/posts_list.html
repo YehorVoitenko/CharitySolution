@@ -7,9 +7,9 @@
     <div class="container">
         {% for post in context %}
             <div align="center">
-                <h2>{{ post.post_title.capitalize }}</h2>
+                <h2>{{ post.post_title }}, by {{ post.organisation.organisation_name }}</h2>
             <div align="left">
-                <h6>{{ post.post_text.capitalize|wordwrap:100|linebreaks}}</h6>
+                <h6>{{ post.post_text|wordwrap:100|linebreaks}}</h6>
             </div>
                 {% if post.file%}
                     <p>Організація додала файл - встановити можна за  <a href="{{post.file.url}}" download><b>посиланням</b></a></p>
