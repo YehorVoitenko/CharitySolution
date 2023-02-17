@@ -68,7 +68,7 @@ def edit_organisation_account(request, organisation_id):
             form = OrganisationForm(request.POST, request.FILES, instance=organisation_info)
             if form.is_valid():
                 form.save()
-                return redirect('/get_posts_list')
+                return redirect('/account')
 
         initial = {
             'organisation_name': organisation_info.organisation_name,
@@ -146,3 +146,8 @@ def create_organisation(request):
             return HttpResponse("<div align='center'><h1>Sorry, this organisation is already exists</h1></div>")
 
     return render(request, 'create_organisation.html')
+
+
+def get_more_info_about_post(request, post_id):
+    post = OrganisationPost.objects.get(id=post_id)
+    return render(request, 'get_more_info_about_post.html', {'post': post})

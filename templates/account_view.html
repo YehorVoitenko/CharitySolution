@@ -4,29 +4,44 @@
 
 {% block content %}
     <br>
-    <div align="center">
-    <h2>Your name: {{ organisation.organisation_name }}</h2><br>
-        <a href="{% url 'edit_organisation_account' organisation_id=request.user.id %}" class="button">Edit account</a>
-    </div><br>
-    {% if organisation_posts %}
-    {% for post in organisation_posts %}
-        <div align="center">
-            <div class="alert alert-dark col-md-3" role="alert">
-                <h2>{{ post.post_title.capitalize }}</h2>
-                {{ post.post_text.capitalize }} <br><br>
-                {% if post.file %}
-                    <a href="{{ post.file.url }}" download><b>Your file</b></a>
-                {% endif %}<br>
-                    <a href="{% url 'edit_post' post_id=post.id %}" class="button">Edit</a>
-                    <a>&emsp;&emsp;&emsp;<a href="{% url 'delete_post' post_id=post.id %}" class="button">Delete</a></a>
-            </div>
+    <div class="row">
+        <div class="col">
+            {% if organisation.organisation_logo %}
+                <img src="{{ organisation.organisation_logo.url}}" width="200px"><br><br>
+            {% endif %}
+            <h4><b>Name:</b> {{ organisation.organisation_name }}</h4>
+            <h4><b>Description:</b><br>{{ organisation.organisation_description }}<br></h4>
+            <h4><b>City: </b>{{ organisation.city }}</h4>
+            <h4><b>Email: </b>{{ organisation.email }}</h4>
+            <h4><b>Telegram: </b>{{ organisation.telegram_nick }}</h4>
+            <h4><b>Instagram: </b>{{ organisation.instagram_nick }}</h4>
+            <h4><b>Site: </b><a href="https://{{ organisation.organisation_site_url }}">{{ organisation.organisation_site_url }}</a></h4>
+            <br><br>
+            <h5><a href="{% url 'edit_organisation_account' organisation_id=request.user.id %}" class="button">Edit account</a></h5>
         </div>
-        {% endfor %}
-    {% else %}
-        <div align="center">
-            <br><br><br>
-            <h3>Now you don't have posts, but you can <a href="{% url 'create_post' %}">create</a> it)</h3>
-            </div>
-    {% endif %}
+
+        <div class="col order-last">
+             {% if organisation_posts %}
+                {% for post in organisation_posts %}
+                    <div align="center" style="width:90%">
+                        <div class="alert alert-dark col-md-" role="alert">
+                            <h2>{{ post.post_title|truncatechars:20  }} </h2>
+                            {{ post.post_text|truncatechars:100  }} <br><br>
+                            {% if post.file %}
+                                <a href="{{ post.file.url }}" download><b>Your file</b></a>
+                            {% endif %}<br>
+                            <a href="{% url 'edit_post' post_id=post.id %}" class="button">Edit</a>
+                            <a>&emsp;&emsp;&emsp;<a href="{% url 'delete_post' post_id=post.id %}" class="button">Delete</a></a>
+                        </div>
+                    </div>
+                {% endfor %}
+             {% else %}
+                <div align="center">
+                    <br><br><br>
+                    <h3>Now you don't have posts, but you can <a href="{% url 'create_post' %}">create</a> it)</h3>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 
 {% endblock %}

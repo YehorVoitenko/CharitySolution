@@ -37,7 +37,7 @@ class OrganisationForm(ModelForm):
                 "name": "organisation_description",
                 "rows": "4",
                 "cols": "10",
-                "placeholder": "Write your post..."
+                "placeholder": "Write your organisation description..."
             },
         ),
             'organisation_name': TextInput(

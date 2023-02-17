@@ -9,7 +9,7 @@
             <div align="center">
                 <h2>{{ post.post_title }}, by {{ post.organisation.organisation_name }}</h2>
             <div align="left">
-                <h6>{{ post.post_text|wordwrap:100|linebreaks}}</h6>
+                <h6>{{ post.post_text|truncatechars:100}}</h6>
             </div>
                 {% if post.file%}
                     <p>Організація додала файл - встановити можна за  <a href="{{post.file.url}}" download><b>посиланням</b></a></p>
@@ -18,13 +18,12 @@
 
             <div align="center">
                 {{ post.date_created }}
-
+            <a href="{% url 'get_more_info_about_post' post_id=post.id %}" class="button">More</a>
                 {% if post.date_updated %}
                     <p><i>edited</i></p>
                 {% endif %}
             </div>
-
-            <hr>
+            <hr><br>
         {% endfor %}
 
     {% else %}
