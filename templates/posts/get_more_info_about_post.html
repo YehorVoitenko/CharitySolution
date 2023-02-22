@@ -1,0 +1,22 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %}Charity Solution{% endblock %}
+
+{#   Deeper post view for better understanding by user   #}
+{% block content %}
+
+    <div class="alert alert-warning" role="alert" id="center_form">
+        <h1>{{ post.post_title }}</h1><br>
+
+        <div align="left">
+            <h3>{{ post.post_text|wordwrap:100|linebreaks|truncatechars:100 }}</h3><br><br>
+        </div>
+
+        {% if post.file %}
+            <p> Also organisation added <a href="{{ post.file.url }}" download=""> file</a></p>
+        {% endif %}
+
+        {{ post.date_created }}<br>
+
+    </div>
+{% endblock %}

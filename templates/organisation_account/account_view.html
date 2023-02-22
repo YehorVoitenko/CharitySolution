@@ -6,9 +6,13 @@
     <br>
     <div class="row">
         <div class="col">
+
+        {#    If oranisation added logo -- it will appear    #}
             {% if organisation.organisation_logo %}
                 <img src="{{ organisation.organisation_logo.url}}" width="200px"><br><br>
             {% endif %}
+
+        {#    Titels with organisation info    #}
             <h4><b>Name:</b> {{ organisation.organisation_name }}</h4>
             <h4><b>Description:</b><br>{{ organisation.organisation_description }}<br></h4>
             <h4><b>City: </b>{{ organisation.city }}</h4>
@@ -20,7 +24,10 @@
             <h5><a href="{% url 'edit_organisation_account' organisation_id=request.user.id %}" class="button">Edit account</a></h5>
         </div>
 
+        {#    Posts, that organisation added for editing or deleting it    #}
         <div class="col order-last">
+
+    {#    If organisation created posts -- it will appear    #}
              {% if organisation_posts %}
                 {% for post in organisation_posts %}
                     <div align="center" style="width:90%">
@@ -35,12 +42,15 @@
                         </div>
                     </div>
                 {% endfor %}
+
+    {#    If organisation didn't created posts -- it will appear and site will suggest to create new one   #}
              {% else %}
                 <div align="center">
                     <br><br><br>
                     <h3>Now you don't have posts, but you can <a href="{% url 'create_post' %}">create</a> it)</h3>
                 </div>
             {% endif %}
+
         </div>
     </div>
 

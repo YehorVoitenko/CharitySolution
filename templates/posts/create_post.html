@@ -7,7 +7,9 @@
     <div align="center" id="center_form">
         <h2>Add your post</h2>
         <br><br>
-         <form method="POST" enctype="multipart/form-data">
+
+        {#    Form for creting post    #}
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
              {{ form.post_title }}
              <br>

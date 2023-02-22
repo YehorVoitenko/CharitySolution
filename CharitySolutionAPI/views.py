@@ -1,38 +1,51 @@
+from datetime import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from CharitySolutionAPI.forms import OrganisationPostForm, OrganisationForm
-from CharitySolutionAPI.models import OrganisationPost, Organisation
-from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 
-
-def posts_list(request):
-    post_data = OrganisationPost.objects.all().order_by('-id')
-    return render(request, 'posts_list.html', context={
-        'context': post_data
-    })
+from CharitySolutionAPI.forms import OrganisationPostForm, OrganisationForm
+from CharitySolutionAPI.models import OrganisationPost, Organisation
 
 
+# JUST RENDERING OR REDIRECTING PAGES
 def error(request):
-    return render(request, 'error.html')
+    return render(request, 'error_pages/error.html')
+
+def homepage(request):
+    return render(request, 'homepage.html')
 
 
+# RESPONSE DATA FROM DB
+def posts_list(request):
+    # Get all data from OrganisationPost, by inverted 'id'
+    post_data = OrganisationPost.objects.all().order_by('-id')
+    return render(request, 'posts/posts_list.html', context={'context': post_data})
+
+
+def get_more_info_about_post(request, post_id):
+    # Get one post from OrganisationPost, by added post id
+    post = OrganisationPost.objects.get(id=post_id)
+    return render(request, 'posts/get_more_info_about_post.html', {'post': post})
+
+
+# AUTH VIEWS
 def login_organisation(request):
     if request.method == 'POST':
-        organisation_name = request.POST['organisation_name']
-        password = request.POST['password']
-        organisation = authenticate(request,
-                                    username=organisation_name,
-                                    password=password)
+        organisation = authenticate(
+            request,
+            username=request.POST['organisation_name'],
+            password=request.POST['password']
+        )
         if organisation is not None:
             login(request, organisation)
             return redirect('/get_posts_list')
         else:
             return redirect('/error')
     else:
-        return render(request, 'login.html')
+        return render(request, 'auth/login.html')
 
 
 def logout_organisation(request):
@@ -40,6 +53,7 @@ def logout_organisation(request):
     return redirect('/login_organisation')
 
 
+# POSTS CREATING, DELETING, EDITING
 def create_post(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -51,14 +65,41 @@ def create_post(request):
                 obj.save()
             return redirect('/get_posts_list')
         form = OrganisationPostForm()
-        return render(request, 'create_post.html', {'form': form})
+        return render(request, 'posts/create_post.html', {'form': form})
     else:
         return redirect('/error')
 
 
-def homepage(request):
-    return render(request, 'home_page.html')
+def edit_post(request, post_id):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            instance = OrganisationPost.objects.get(id=post_id)
+            form = OrganisationPostForm(request.POST, request.FILES, instance=instance)
+            if form.is_valid():
+                obj = form.save(commit=False)
+                obj.date_updated = datetime.now()
+                obj.save()
+                return redirect('/get_posts_list')
+        post = OrganisationPost.objects.get(id=post_id)
 
+        form = OrganisationPostForm(initial={'post_text': post.post_text, 'post_title': post.post_title})
+
+        return render(request, 'posts/edit_post.html', {'form': form, 'post': post})
+    else:
+        return redirect('/error')
+
+
+def delete_post(request, post_id):
+    if request.user.is_authenticated:
+        post = OrganisationPost.objects.get(id=post_id)
+        if post.organisation_id == request.user.id:
+            OrganisationPost.objects.get(id=post_id).delete()
+            return redirect('/get_posts_list')
+    else:
+        return redirect('/error')
+
+
+# ORGANISATIONS CREATING, DELETING, EDITING
 
 def edit_organisation_account(request, organisation_id):
     if request.user.is_authenticated and organisation_id == request.user.id:
@@ -81,50 +122,21 @@ def edit_organisation_account(request, organisation_id):
         }
         form = OrganisationForm(initial=initial)
 
-        return render(request, 'edit_organisation_account.html', {
+        return render(request, 'organisation_account/edit_organisation_account.html', {
             'form': form,
             'organisation_info': organisation_info
-            }
+        }
                       )
     else:
         return redirect('/error')
 
 
-def account(request):
+def get_account_view(request):
     if request.user.is_authenticated:
         organisation = Organisation.objects.get(pk=request.user.id)
         organisation_posts = OrganisationPost.objects.filter(organisation=request.user.id).order_by('-date_created')
-        return render(request, 'account_view.html', {'organisation': organisation,
-                                                     'organisation_posts': organisation_posts})
-    else:
-        return redirect('/error')
-
-
-def edit_post(request, post_id):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            instance = OrganisationPost.objects.get(id=post_id)
-            form = OrganisationPostForm(request.POST, request.FILES, instance=instance)
-            if form.is_valid():
-                obj = form.save(commit=False)
-                obj.date_updated = datetime.now()
-                obj.save()
-                return redirect('/get_posts_list')
-        post = OrganisationPost.objects.get(id=post_id)
-
-        form = OrganisationPostForm(initial={'post_text': post.post_text, 'post_title': post.post_title})
-
-        return render(request, 'edit_post.html', {'form': form, 'post': post})
-    else:
-        return redirect('/error')
-
-
-def delete_post(request, post_id):
-    if request.user.is_authenticated:
-        post = OrganisationPost.objects.get(id=post_id)
-        if post.organisation_id == request.user.id:
-            OrganisationPost.objects.get(id=post_id).delete()
-            return redirect('/get_posts_list')
+        return render(request, 'organisation_account/account_view.html', {'organisation': organisation,
+                                                                          'organisation_posts': organisation_posts})
     else:
         return redirect('/error')
 
@@ -145,9 +157,5 @@ def create_organisation(request):
         except IntegrityError:
             return HttpResponse("<div align='center'><h1>Sorry, this organisation is already exists</h1></div>")
 
-    return render(request, 'create_organisation.html')
+    return render(request, 'organisation_account/create_organisation.html')
 
-
-def get_more_info_about_post(request, post_id):
-    post = OrganisationPost.objects.get(id=post_id)
-    return render(request, 'get_more_info_about_post.html', {'post': post})

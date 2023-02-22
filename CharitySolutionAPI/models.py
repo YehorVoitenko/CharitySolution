@@ -11,6 +11,9 @@ class Organisation(models.Model):
     organisation_site_url = models.CharField(max_length=100, null=True)
     organisation_logo = models.FileField(null=True, blank=True, upload_to='organisation_logos')
 
+    def __str__(self):
+        return self.organisation_name
+
 
 class OrganisationPost(models.Model):
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE)
