@@ -6,7 +6,7 @@
 {% block content %}
 
     <div class="alert alert-warning" role="alert" id="center_form">
-        <h1>{{ post.post_title }}</h1><br>
+        <h1>{{ post.post_title }}, by {{ request.user }}</h1><br>
 
         <div align="left">
             <h3>{{ post.post_text|wordwrap:100|linebreaks|truncatechars:100 }}</h3><br><br>
