@@ -100,7 +100,6 @@ def delete_post(request, post_id):
 
 
 # ORGANISATIONS CREATING, DELETING, EDITING
-
 def edit_organisation_account(request, organisation_id):
     if request.user.is_authenticated and organisation_id == request.user.id:
         organisation_info = Organisation.objects.get(id=organisation_id)
