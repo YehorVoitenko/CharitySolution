@@ -14,6 +14,7 @@ from CharitySolutionAPI.models import OrganisationPost, Organisation
 def error(request):
     return render(request, 'error_pages/error.html')
 
+
 def homepage(request):
     return render(request, 'homepage.html')
 
@@ -28,7 +29,9 @@ def posts_list(request):
 def get_more_info_about_post(request, post_id):
     # Get one post from OrganisationPost, by added post id
     post = OrganisationPost.objects.get(id=post_id)
-    return render(request, 'posts/get_more_info_about_post.html', {'post': post})
+    organisation = Organisation.objects.get(id=request.user.id)
+    return render(request, 'posts/get_more_info_about_post.html', {'post': post,
+                                                                   'organisation': organisation})
 
 
 # AUTH VIEWS

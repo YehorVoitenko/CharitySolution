@@ -1,11 +1,11 @@
 from .models import OrganisationPost, Organisation
-from django.forms import ModelForm, TextInput, Textarea
+from django.forms import ModelForm, TextInput, Textarea, NumberInput
 
 
 class OrganisationPostForm(ModelForm):
     class Meta:
         model = OrganisationPost
-        fields = ["post_title", "post_text", "file"]
+        fields = ['post_title', 'post_text', 'city', 'help_category', 'file']
         widgets = {'post_text': Textarea(
             attrs={
                 "class": "form-control col-md-3",
@@ -21,7 +21,15 @@ class OrganisationPostForm(ModelForm):
                     "class": "form-control form-control-lg col-md-3",
                     "aria-label": ".form-control-lg example",
                     "name": "post_title"
-                })
+                }
+            ),
+            'city': TextInput(
+                attrs={
+                    "class": "form-control col-md-3",
+                    "name": "city",
+                    'placeholder': "Kyiv, Kharkiv, Lviv..."
+                }
+            ),
         }
 
 

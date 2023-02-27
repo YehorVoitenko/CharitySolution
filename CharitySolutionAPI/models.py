@@ -1,5 +1,11 @@
 from django.db import models
 
+HELP_CATEGORIES = [
+    ('Humanitarian aid', 'humanitarian_aid'),
+    ('Aid for children', 'children_aid'),
+    ('Another', 'another')
+]
+
 
 class Organisation(models.Model):
     organisation_name = models.CharField(max_length=100, unique=True)
@@ -19,6 +25,8 @@ class OrganisationPost(models.Model):
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE)
     post_title = models.CharField(max_length=100)
     post_text = models.CharField(max_length=2000)
+    city = models.CharField(max_length=255)
+    help_category = models.CharField(max_length=255, choices=HELP_CATEGORIES, default='Humanitarian aid')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(null=True)
     file = models.FileField(null=True, blank=True)

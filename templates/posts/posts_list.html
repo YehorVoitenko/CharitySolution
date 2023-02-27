@@ -14,7 +14,9 @@
                     <h2>{{ post.post_title }}, by {{ post.organisation.organisation_name }}</h2>
 
                     <div align="left">
-                        <h6>{{ post.post_text|truncatechars:100}}</h6>
+                        <h6><b>Description: </b>{{ post.post_text|truncatechars:100}}</h6>
+                        <h6><b>City:</b> <a>{{ post.city }}</a></h6>
+                        <h6><b>Help category:</b> <a>{{ post.help_category }}</a></h6>
                     </div>
 
                     {% if post.file%}
