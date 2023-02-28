@@ -1,5 +1,5 @@
 from .models import OrganisationPost, Organisation
-from django.forms import ModelForm, TextInput, Textarea, NumberInput
+from django.forms import ModelForm, TextInput, Textarea
 
 
 class OrganisationPostForm(ModelForm):

@@ -1,9 +1,9 @@
 from django.db import models
 
 HELP_CATEGORIES = [
-    ('Humanitarian aid', 'humanitarian_aid'),
-    ('Aid for children', 'children_aid'),
-    ('Another', 'another')
+    ('Humanitarian aid', 'Humanitarian aid'),
+    ('Aid for children', 'Aid for children'),
+    ('Another', 'Another')
 ]
 
 
