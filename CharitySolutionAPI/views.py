@@ -56,7 +56,7 @@ def logout_organisation(request):
     return redirect('/login_organisation')
 
 
-# POSTS CREATING, DELETING, EDITING
+# POSTS: CREATING, DELETING, EDITING
 def create_post(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -85,7 +85,10 @@ def edit_post(request, post_id):
                 return redirect('/get_posts_list')
         post = OrganisationPost.objects.get(id=post_id)
 
-        form = OrganisationPostForm(initial={'post_text': post.post_text, 'post_title': post.post_title})
+        form = OrganisationPostForm(initial={'post_text': post.post_text,
+                                             'post_title': post.post_title,
+                                             'help_category': post.help_category,
+                                             'city': post.city})
 
         return render(request, 'posts/edit_post.html', {'form': form, 'post': post})
     else:
