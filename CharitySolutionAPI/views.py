@@ -114,7 +114,7 @@ def edit_organisation_account(request, organisation_id):
             form = OrganisationForm(request.POST, request.FILES, instance=organisation_info)
             if form.is_valid():
                 form.save()
-                return redirect('/account')
+                return redirect('/get_account_view')
 
         initial = {
             'organisation_name': organisation_info.organisation_name,
