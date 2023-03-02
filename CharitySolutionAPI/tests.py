@@ -5,6 +5,30 @@ from CharitySolutionAPI.models import OrganisationPost, Organisation
 
 
 class TestAPI(TestCase):
+    def setUp(self):
+        self.test_user = User.objects.create(username="user", is_superuser=True)
+        self.create_organisation = Organisation.objects.create(
+            organisation_name="test_organisation",
+            organisation_description="test_organisation_description",
+            city="test_city",
+            email="email",
+            telegram_nick="telegram_nick",
+            instagram_nick="instagram_nick",
+            organisation_site_url="organisation_site_url",
+            organisation_logo="test_logo",
+        )
+
+        self.create_organisation_post = OrganisationPost.objects.create(
+            organisation=self.create_organisation,
+            post_title="test_title",
+            post_text="test_text",
+            city="test_city",
+            help_category="Another",
+        )
+
+        self.client.force_login(self.test_user)
+        self.organisation = Organisation.objects.get(pk=self.test_user.id)
+
     def test_homepage(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
