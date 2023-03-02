@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from CharitySolutionAPI.models import OrganisationPost, Organisation
 
@@ -7,10 +8,26 @@ class TestAPI(TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
-    # def test_edit_post(self):
-    #     post_id = self.test_post_creating_in_db().id
-    #     response = self.client.get(f'/edit_post/{post_id}')
-    #     print(response)
+    def test_postline_page(self):
+        response = self.client.get('/get_posts_list/')
+        self.assertEqual(response.status_code, 200)
+
+    # def test_organisation_post_form(self):
+    #     # https://www.valentinog.com/blog/testing-modelform/
+    #     from django.contrib.auth.models import User
+    #     from django.http import HttpRequest
+    #     request = HttpRequest()
+    #     request.POST = {
+    #         "post_title": 'test',
+    #         "post_text": "test",
+    #         "city": "test",
+    #         "help_category": "Another",
+    #         'file': 'test.png'
+    #     }
+    #
+    #     form = OrganisationPostForm(request.POST, request.FILES)
+    #
+    #     self.assertTrue(form.is_valid())
 
     def test_organisation_creating_in_db(self):
         Organisation.objects.create(organisation_name='test_organisation',
