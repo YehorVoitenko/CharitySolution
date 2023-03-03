@@ -39,6 +39,10 @@
                 <a class="nav-link" href="{% url 'get_posts_list' %}">Postline<span class="sr-only">(current)</span></a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'registrate_user' %}">Registrate<span class="sr-only">(current)</span></a>
+            </li>
+
             {# If organisation authenticated - 'Account' button appears #}
             {% if request.user.is_authenticated and request.path != '/get_account_view/'  %}
                 <li class="nav-item">
