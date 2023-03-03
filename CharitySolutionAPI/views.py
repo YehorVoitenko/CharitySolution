@@ -11,8 +11,9 @@ from CharitySolutionAPI.decorators import (
     is_user_authenticated_with_post_id_param,
     is_user_authenticated_with_organisation_id_param,
 )
-from CharitySolutionAPI.forms import OrganisationPostForm, OrganisationForm
+from CharitySolutionAPI.forms import OrganisationPostForm, OrganisationForm, UserForm
 from CharitySolutionAPI.models import OrganisationPost, Organisation
+from CharitySolutionAPI import models
 
 
 # JUST RENDERING OR REDIRECTING PAGES
@@ -175,3 +176,16 @@ def create_organisation(request):
             )
 
     return render(request, "organisation_account/create_organisation.html")
+
+
+# USER VIEWS
+def registrate_user(request):
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect("/get_posts_list")
+    form = UserForm()
+    return render(
+        request, "user/create_user_account.html", {"form": form}
+    )
