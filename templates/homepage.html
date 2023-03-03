@@ -1,0 +1,37 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %}
+    Charity Solution
+{% endblock %}
+
+{% block content %}
+
+    {#   Main text about project   #}
+    <div align="center" id="center_form" class="containter">
+        <h1><b>Hey, it's Charity Solution)</b></h1><br>
+        <h5>It's <b>Ukranian product</b>, that have target to connect helpers and those who now need help</h5><br>
+
+        <div class="container">
+            <hr>
+        </div>
+
+        {#   Text about opportunity for creating posts by organisation   #}
+        <h5>In <a href="{% url 'get_posts_list' %}"><b>Postline</b></a> you can find posts from charity organisations, that are going to help</h5>
+
+        <p>Here you can find your town and help type, that charity organisation want to provide</p><br>
+
+        <div class="container">
+            <hr>
+        </div>
+
+        {#   Text about opportunity for organsation - to registarate themself   #}
+        <h5>If you are charity organisation - you can <a href="{% url 'create_organisation' %}"><b>registrate</b></a>
+            your organisation and our admins will review your form
+        </h5><br>
+
+        <div class="container">
+            <hr>
+        </div>
+
+    </div>
+{% endblock %}

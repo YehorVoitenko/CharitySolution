@@ -1,0 +1,66 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Edit account {% endblock %}
+
+{% block content %}
+    <div class="col-md-7" id="login">
+        <h4 class="mb-3">Organisation information</h4><br>
+
+        {#   Form with titles for editing info     #}
+        <form class="needs-validation" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {#     Edit organisation name    #}
+            <div class="col-sm-6" >
+                <label for="firstName" class="form-label" ><b>Organisation name</b></label>
+                {{ form.organisation_name }}<br>
+
+                {#     Edit organisation description    #}
+                <label for="firstName" class="form-label" ><b>Organisation description</b></label>
+                {{ form.organisation_description }}<br>
+
+                {#     Edit organisation city location    #}
+                <label for="city" class="form-label"><b>City</b></label>
+                {{ form.city }}<br>
+
+                {#   Block with organisation social media   #}
+                {#     Edit organisation email    #}
+                <label for="email" class="form-label"><b>Email</b><span class="text-muted"> (Optional)</span></label>
+                {{ form.email }}<br>
+
+                <label for="username" class="form-label"><b>Social media</b><span class="text-muted"> (Optional)</span></label>
+
+                {#     Edit organisation telegram    #}
+                <div class="input-group has-validation">
+                    <span class="input-group-text">Telegram</span>
+                    {{ form.telegram_nick }}
+                </div><br>
+
+                {#     Edit organisation instagram    #}
+                <div class="input-group has-validation">
+                    <span class="input-group-text">Instagram</span>
+                    {{ form.instagram_nick }}
+                </div><br>
+
+                {#     Edit organisation site    #}
+                <div class="input-group has-validation">
+                    <span class="input-group-text">Site</span>
+                    {{ form.organisation_site_url }}
+                </div><br>
+
+
+                {#     Form for adding organisation logo   #}
+                <div class="input-group has-validation">
+                    <label class="form-label"><b>Organisation logo</b><br><br>
+                        {{ form.organisation_logo }}
+                    </label>
+                </div><br>
+
+
+                {#     Submit changes and redirect to account view   #}
+                 <input type="submit" class="btn btn-primary" value="Save">
+
+            </div>
+        </form>
+    </div>
+{% endblock %}}

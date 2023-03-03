@@ -1,0 +1,32 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Edit post {% endblock %}
+
+{% block content %}
+    <div align="center" id="center_form">
+
+        {# Check if current organisation is auth online #}
+         <form method="POST" enctype="multipart/form-data">
+             {% csrf_token %}
+
+             {% if post.organisation_id == request.user.id %}
+                 {{ form.post_title}}
+                 <br>
+
+                 {{ form.post_text }}
+                 <br>
+                 {{ form.city }}
+                 <br><br>
+                 {{ form.help_category }}
+                <br><br>
+                 {{ form.file }}
+                 <input type="submit" class="btn btn-primary" value="Save">
+
+             {#If current organisation is not auth online - it can't edit posts#}
+             {% else %}
+                 <h1>Sorry you don't have access</h1>
+             {% endif %}
+
+            </form>
+        </div>
+{% endblock %}

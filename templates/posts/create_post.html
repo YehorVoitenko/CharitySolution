@@ -1,0 +1,29 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Add post {% endblock %}
+
+{% block content %}
+<br>
+    <div align="center">
+
+        <h2>Add your post</h2>
+        <br><br>
+        {#    Form for creting post    #}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.post_title }}
+            <br>
+            {{ form.post_text }}
+            <br>
+
+            {{ form.city }}
+            <br>
+
+            {{ form.help_category }}
+            <br> <br>
+
+            {{ form.file }}
+             <input type="submit" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock %}

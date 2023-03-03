@@ -1,4 +1,5 @@
 from django.contrib import admin
-from CharitySolutionAPI.models import UsersPost
+from CharitySolutionAPI.models import OrganisationPost, Organisation
 
-admin.site.register(UsersPost)
+admin.site.register(OrganisationPost)
+admin.site.register(Organisation)

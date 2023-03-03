@@ -1,0 +1,48 @@
+{% extends 'pattern_page.html' %}
+{% block title %} Postline {% endblock %}
+
+{% block content %}
+<br>
+    {#  If there posts on website  #}
+    {% if context %}
+
+        {#   Main post view  #}
+        <div class="container">
+
+            {% for post in context %}
+                <div align="center">
+                    <h2>{{ post.post_title }}, by {{ post.organisation.organisation_name }}</h2>
+
+                    <div align="left">
+                        <h6><b>Description: </b>{{ post.post_text|truncatechars:100}}</h6>
+                        <h6><b>City:</b> <a>{{ post.city }}</a></h6>
+                        <h6><b>Help category:</b> <a>{{ post.help_category }}</a></h6>
+                    </div>
+
+                    {% if post.file%}
+                        <p>Організація додала файл - встановити можна за  <a href="{{post.file.url}}" download><b>посиланням</b></a></p>
+                    {% endif %}
+                </div>
+
+                <div align="center">
+                    {{ post.date_created }}
+
+                    <a href="{% url 'get_more_info_about_post' post_id=post.id %}" class="button">More</a>
+
+                    {% if post.date_updated %}
+                        <p><i>edited</i></p>
+                    {% endif %}
+                </div><hr><br>
+            {% endfor %}
+
+            {% else %}
+
+    {#  If there not posts on website  #}
+            <div align="center">
+                <h3>Unfortunately, we don't have posts, so you can <a href="{% url 'create_post' %}"> create it)</a></h3>
+            </div>
+
+        </div>
+    {% endif %}
+
+{% endblock %}

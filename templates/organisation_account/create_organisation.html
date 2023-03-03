@@ -1,0 +1,23 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Create organisation {% endblock %}
+
+{% block content %}
+<br>
+    <div align="center" id="center_form">
+        <h2>Registrate organisation</h2>
+        <br><br>
+
+        {#    Form for creating new organisation    #}
+         <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+             <input type="text" name="organisation_name" class="form-control col-md-3"><br>
+
+             <input type="password" name="password" class="form-control form-control-lg col-md-3">
+             <br><br>
+
+             <input type="submit" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock %}

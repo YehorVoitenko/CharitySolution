@@ -1,0 +1,30 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Error {% endblock %}
+
+
+{% block content %}
+<br>
+    <div align="center">
+
+    {#  Main error alert  #}
+        <div class="alert alert-danger col-md-4 col-md-offset-4" role="alert">
+            <h2><b>ERROR ERROR ERROR</b></h2>
+        </div>
+
+    {#  If something goes wrong and user is authenticated -- suggest to go to 'CreatePost' view #}
+        {%  if user.is_authenticated %}
+        <form method="get" action="/add_post" >
+            <button type="submit" class="btn btn-secondary">Go back</button>
+        </form>
+
+    {#  If something goes wrong and user is not authenticated -- suggest to LogIn page #}
+        {% else %}
+            <form method="get" action="/login_organisation" >
+                <button type="submit" class="btn btn-secondary">Go to LogIn</button>
+            </form>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
