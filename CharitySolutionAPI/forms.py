@@ -1,4 +1,4 @@
-from .models import OrganisationPost, Organisation
+from .models import OrganisationPost, Organisation, User
 from django.forms import ModelForm, TextInput, Textarea
 
 
@@ -96,4 +96,49 @@ class OrganisationForm(ModelForm):
                     "placeholder": "www.site.com",
                 }
             ),
+        }
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = "__all__"
+        widgets = {
+            "user_first_name": TextInput(
+                attrs={
+                    "class": "form-control col-md-3",
+                    "name": "user_first_name",
+                    "placeholder": "Your name",
+                }
+            ),
+            "user_surname": TextInput(
+                attrs={
+                    "class": "form-control col-md-3",
+                    "name": "user_surname",
+                    "placeholder": "Your surname",
+                }
+            ),
+            "user_patronymic_name": TextInput(
+                attrs={
+                    "class": "form-control  col-md-3",
+                    "name": "user_patronymic_name",
+                    "placeholder": "Your patronymic name",
+                }
+            ),
+            "city": TextInput(
+                attrs={
+                    "class": "form-control  col-md-3",
+                    "name": "city",
+                    "placeholder": "Kyiv, Kharkiv, Lviv...",
+                }
+            ),
+            "phone_number": TextInput(
+                attrs={
+                    "type": "tel",
+                    "class": "form-control  col-md-3",
+                    "name": "phone_number",
+                    "placeholder": "+380 050 00 00 000",
+                }
+            ),
+            "date_of_birth": TextInput(attrs={"type": "date"}),
         }

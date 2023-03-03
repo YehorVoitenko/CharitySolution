@@ -37,3 +37,15 @@ class OrganisationPost(models.Model):
 
     def __str__(self):
         return self.post_title
+
+
+class User(models.Model):
+    user_first_name = models.CharField(max_length=255, null=False)
+    user_surname = models.CharField(max_length=255, null=False)
+    user_patronymic_name = models.CharField(max_length=255, null=False)
+    date_of_birth = models.DateTimeField()
+    city = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=13)
+
+    def __str__(self):
+        return self.user_surname
