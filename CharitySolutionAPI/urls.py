@@ -24,6 +24,7 @@ urlpatterns = [
     # Creating URLs
     path("create_post/", views.create_post, name="create_post"),
     path("create_organisation/", views.create_organisation, name="create_organisation"),
+    path("registrate_user/", views.registrate_user, name="registrate_user"),
     # Getting info URLs
     path("get_posts_list/", views.posts_list, name="get_posts_list"),
     path("get_account_view/", views.get_account_view, name="get_account_view"),
