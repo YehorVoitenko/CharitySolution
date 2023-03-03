@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from CharitySolutionAPI.models import OrganisationPost, Organisation
+from CharitySolutionAPI import models
 
 
 class TestAPI(TestCase):
@@ -24,6 +25,15 @@ class TestAPI(TestCase):
             post_text="test_text",
             city="test_city",
             help_category="Another",
+        )
+
+        self.create_user = models.User.objects.create(
+            user_surname="test_user_surname",
+            user_first_name="test_first_surname",
+            user_patronymic_name="test_patronymic_surname",
+            city="test_sity",
+            date_of_birth="2023-03-10 02:00:00+02",
+            phone_number="+380661896330",
         )
 
         self.client.force_login(self.test_user)
@@ -62,5 +72,10 @@ class TestAPI(TestCase):
 
     def test_post_creating_in_db(self):
         response = OrganisationPost.objects.get(post_title="test_title")
+
+        self.assertTrue(response)
+
+    def test_user_creating_in_db(self):
+        response = models.User.objects.get(user_surname="test_user_surname")
 
         self.assertTrue(response)
