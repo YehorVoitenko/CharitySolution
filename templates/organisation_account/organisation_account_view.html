@@ -37,8 +37,14 @@
                             {% if post.file %}
                                 <a href="{{ post.file.url }}" download><b>Your file</b></a>
                             {% endif %}<br>
-                            <a href="{% url 'edit_post' post_id=post.id %}" class="button">Edit</a>
-                            <a>&emsp;&emsp;&emsp;<a href="{% url 'delete_post' post_id=post.id %}" class="button">Delete</a></a>
+                            {% if post.meeting_date %}
+                                <b>{{ post.meeting_date|date:"SHORT_DATE_FORMAT" }}</b>
+                            {% endif %}
+                            {% if post.meeting_time %}
+                                {{ post.meeting_time }}
+                            {% endif %}<br>
+                            <a href="{% url 'edit_organisation_post' post_id=post.id %}" class="button">Edit</a>
+                            <a>&emsp;&emsp;&emsp;<a href="{% url 'delete_organisation_post' post_id=post.id %}" class="button">Delete</a></a>
                         </div>
                     </div>
                 {% endfor %}

@@ -5,7 +5,15 @@ from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInp
 class OrganisationPostForm(ModelForm):
     class Meta:
         model = OrganisationPost
-        fields = ["post_title", "post_text", "city", "help_category", "file"]
+        fields = [
+            "post_title",
+            "post_text",
+            "city",
+            "help_category",
+            "file",
+            "meeting_date",
+            "meeting_time",
+        ]
         widgets = {
             "post_text": Textarea(
                 attrs={
@@ -31,6 +39,8 @@ class OrganisationPostForm(ModelForm):
                     "placeholder": "Kyiv, Kharkiv, Lviv...",
                 }
             ),
+            "meeting_date": TextInput(attrs={"type": "date"}),
+            "meeting_time": TextInput(attrs={"type": "time"}),
         }
 
 
@@ -45,7 +55,7 @@ class OrganisationForm(ModelForm):
             "telegram_nick",
             "instagram_nick",
             "organisation_site_url",
-            "organisation_logo"
+            "organisation_logo",
         ]
 
         widgets = {
@@ -102,8 +112,16 @@ class OrganisationForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['date_of_birth', 'user_first_name', 'user_surname', 'user_patronymic_name', 'city', 'phone_number',
-                  'email', 'password']
+        fields = [
+            "date_of_birth",
+            "user_first_name",
+            "user_surname",
+            "user_patronymic_name",
+            "city",
+            "phone_number",
+            "email",
+            "password",
+        ]
         widgets = {
             "user_first_name": TextInput(
                 attrs={

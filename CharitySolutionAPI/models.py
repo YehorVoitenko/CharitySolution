@@ -9,7 +9,7 @@ HELP_CATEGORIES = [
 
 
 class Organisation(models.Model):
-    client_id = models.IntegerField(null=True)
+    client_id = models.IntegerField()
     organisation_name = models.CharField(max_length=100, unique=True)
     organisation_description = models.CharField(max_length=2000, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -35,6 +35,8 @@ class OrganisationPost(models.Model):
     )
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(null=True)
+    meeting_date = models.DateTimeField(null=True, blank=True)
+    meeting_time = models.TimeField(null=True, blank=True)
     file = models.FileField(null=True, blank=True)
 
     def __str__(self):
@@ -42,7 +44,7 @@ class OrganisationPost(models.Model):
 
 
 class User(models.Model):
-    client = models.IntegerField(null=True)
+    client = models.IntegerField()
     user_first_name = models.CharField(max_length=255, null=False)
     user_surname = models.CharField(max_length=255, null=False)
     user_patronymic_name = models.CharField(max_length=255, null=False)

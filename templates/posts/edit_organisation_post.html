@@ -9,7 +9,6 @@
          <form method="POST" enctype="multipart/form-data">
              {% csrf_token %}
 
-             {% if post.organisation_id == request.user.id %}
                  {{ form.post_title}}
                  <br>
 
@@ -17,15 +16,12 @@
                  <br>
                  {{ form.city }}
                  <br><br>
-                 {{ form.help_category }}
+                 {{ form.help_category }}<br><br>
+                <label>{{ form.meeting_time }} {{ form.meeting_date }}</label>
                 <br><br>
                  {{ form.file }}
                  <input type="submit" class="btn btn-primary" value="Save">
 
-             {#If current organisation is not auth online - it can't edit posts#}
-             {% else %}
-                 <h1>Sorry you don't have access</h1>
-             {% endif %}
 
             </form>
         </div>
