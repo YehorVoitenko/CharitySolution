@@ -11,17 +11,18 @@
         {#    Form for creting post    #}
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.post_title }}
-            <br>
-            {{ form.post_text }}
-            <br>
+            {{ form.post_title }}<br>
 
-            {{ form.city }}
-            <br>
+            {{ form.post_text }}<br>
 
-            {{ form.help_category }}
-            <br> <br>
+            {{ form.city }}<br>
 
+            {{ form.help_category }}<br><br>
+
+            <label>Meeting date:
+            {{ form.meeting_date }}&nbsp&nbsp
+            {{ form.meeting_time }}
+            </label><br><br>
             {{ form.file }}
              <input type="submit" class="btn btn-primary">
         </form>

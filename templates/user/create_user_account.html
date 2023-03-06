@@ -1,0 +1,23 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} Create user {% endblock %}
+
+{% block content %}
+    <div id="center_form" align="center">
+        <h2>Create your cabinet</h2><br>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.user_first_name }}<br>
+            {{ form.user_surname }}<br>
+            {{ form.user_patronymic_name }}<br>
+            {{ form.email }}<br>
+            <label>Date of birth</label>
+            {{ form.date_of_birth }}<br><br>
+            {{ form.city }}<br>
+            {{ form.phone_number }}<br><br>
+            {{ form.password }}<br>
+
+             <input type="submit" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock %}

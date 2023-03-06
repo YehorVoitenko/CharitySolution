@@ -40,7 +40,7 @@
             </li>
 
             {# If organisation authenticated - 'Account' button appears #}
-            {% if request.user.is_authenticated and request.path != '/get_account_view/'  %}
+            {% if request.path != '/get_account_view/' and request.user.is_superuser  %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'get_account_view' %}">Account</a>
                 </li>
@@ -54,15 +54,15 @@
             {% endif %}
 
             {# If organisation isn't authenticatedit - can 'LogIn' #}
-            {% if not request.path == '/login_organisation/' and not request.user.is_authenticated %}
+            {% if not request.path == '/login_user/' and not request.user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login_organisation' %}">LogIn</a>
+                    <a class="nav-link" href="{% url 'login_user' %}">LogIn</a>
                 </li>
 
             {# If organisation authenticated - it can 'Logout' #}
             {% elif request.user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout_organisation' %}">LogOut</a>
+                    <a class="nav-link" href="{% url 'logout_current_client' %}">LogOut</a>
                 </li>
             {% endif %}
         </ul>

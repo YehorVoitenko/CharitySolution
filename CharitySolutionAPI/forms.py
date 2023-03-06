@@ -1,11 +1,19 @@
-from .models import OrganisationPost, Organisation
-from django.forms import ModelForm, TextInput, Textarea
+from .models import OrganisationPost, Organisation, User
+from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInput
 
 
 class OrganisationPostForm(ModelForm):
     class Meta:
         model = OrganisationPost
-        fields = ["post_title", "post_text", "city", "help_category", "file"]
+        fields = [
+            "post_title",
+            "post_text",
+            "city",
+            "help_category",
+            "file",
+            "meeting_date",
+            "meeting_time",
+        ]
         widgets = {
             "post_text": Textarea(
                 attrs={
@@ -31,6 +39,8 @@ class OrganisationPostForm(ModelForm):
                     "placeholder": "Kyiv, Kharkiv, Lviv...",
                 }
             ),
+            "meeting_date": TextInput(attrs={"type": "date"}),
+            "meeting_time": TextInput(attrs={"type": "time"}),
         }
 
 
@@ -96,4 +106,72 @@ class OrganisationForm(ModelForm):
                     "placeholder": "www.site.com",
                 }
             ),
+        }
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            "date_of_birth",
+            "user_first_name",
+            "user_surname",
+            "user_patronymic_name",
+            "city",
+            "phone_number",
+            "email",
+            "password",
+        ]
+        widgets = {
+            "user_first_name": TextInput(
+                attrs={
+                    "class": "form-control col-md-3",
+                    "name": "user_first_name",
+                    "placeholder": "Your name",
+                }
+            ),
+            "user_surname": TextInput(
+                attrs={
+                    "class": "form-control col-md-3",
+                    "name": "user_surname",
+                    "placeholder": "Your surname",
+                }
+            ),
+            "user_patronymic_name": TextInput(
+                attrs={
+                    "class": "form-control  col-md-3",
+                    "name": "user_patronymic_name",
+                    "placeholder": "Your patronymic name",
+                }
+            ),
+            "city": TextInput(
+                attrs={
+                    "class": "form-control  col-md-3",
+                    "name": "city",
+                    "placeholder": "Kyiv, Kharkiv, Lviv...",
+                }
+            ),
+            "phone_number": TextInput(
+                attrs={
+                    "type": "tel",
+                    "class": "form-control  col-md-3",
+                    "name": "phone_number",
+                    "placeholder": "+380 050 00 00 000",
+                }
+            ),
+            "email": EmailInput(
+                attrs={
+                    "class": "form-control  col-md-3",
+                    "name": "email",
+                    "placeholder": "user@gmail.com",
+                }
+            ),
+            "password": PasswordInput(
+                attrs={
+                    "type": "password",
+                    "class": "form-control  col-md-3",
+                    "placeholder": "Password",
+                }
+            ),
+            "date_of_birth": TextInput(attrs={"type": "date"}),
         }
