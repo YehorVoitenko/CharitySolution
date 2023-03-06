@@ -9,13 +9,16 @@
 
     {#  Forms for adding organisation name and password  #}
         <div class="form-group">
-            <label for="exampleInputEmail1"><b>Organisation name</b></label><br>
-            <input type="text" class="form-control col-md-2 col-md-offset-4" name="organisation_name" placeholder="Name">
-        </div>
+            <label><b>Organisation name</b></label><br>
+{#            <input type="text" class="form-control col-md-2 col-md-offset-4" name="organisation_name" placeholder="Name">#}
+            {{ form.organisation_name }}
+            <br>
+            <br>
 
-        <div class="form-group">
-           <label for="exampleInputPassword1"><b>Password</b></label><br>
-           <input type="password" class="form-control col-md-2 col-md-offset-4 " name="password" placeholder="Password">
+           <label><b>Password</b></label><br>
+{#           <input type="password" class="form-control col-md-2 col-md-offset-4 " name="password" placeholder="Password">#}
+            {{ form.password}}
+
        </div>
 
     {#    Suggest for organisation to login, if it had created  #}

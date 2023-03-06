@@ -1,19 +1,25 @@
 from .models import OrganisationPost, Organisation, User
-from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInput
+from django.forms import (
+    ModelForm,
+    TextInput,
+    Textarea,
+    EmailInput,
+    PasswordInput,
+    Form,
+    CharField,
+)
+
+from django import forms
 
 
 class OrganisationPostForm(ModelForm):
     class Meta:
         model = OrganisationPost
-        fields = [
-            "post_title",
-            "post_text",
-            "city",
-            "help_category",
-            "file",
-            "meeting_date",
-            "meeting_time",
-        ]
+        exclude = (
+            "organisation",
+            "date_created",
+            "date_updated",
+        )
         widgets = {
             "post_text": Textarea(
                 attrs={
@@ -47,16 +53,7 @@ class OrganisationPostForm(ModelForm):
 class OrganisationForm(ModelForm):
     class Meta:
         model = Organisation
-        fields = [
-            "organisation_name",
-            "organisation_description",
-            "city",
-            "email",
-            "telegram_nick",
-            "instagram_nick",
-            "organisation_site_url",
-            "organisation_logo",
-        ]
+        exclude = ("client_id",)
 
         widgets = {
             "organisation_description": Textarea(
@@ -174,4 +171,30 @@ class UserForm(ModelForm):
                 }
             ),
             "date_of_birth": TextInput(attrs={"type": "date"}),
+        }
+
+
+class LoginOrganisationForm(forms.Form):
+    organisation_name = CharField(max_length=255)
+    password = CharField(max_length=255)
+
+    class Meta:
+        fields = ["organisation_name", "password"]
+        widgets = {
+            "organisation_name": TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control col-md-2 col-md-offset-4",
+                    "name": "organisation_name",
+                    "placeholder": "Name",
+                }
+            ),
+            "password": PasswordInput(
+                attrs={
+                    "type": "password",
+                    "class": "form-control col-md-2 col-md-offset-4",
+                    "name": "password",
+                    "placeholder": "Password",
+                }
+            ),
         }
