@@ -1,0 +1,29 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} LogIn {% endblock %}
+
+{% block content %}
+<div align="center" id="login">
+    <form method="post">
+        {% csrf_token %}
+
+    {#  Forms for adding organisation name and password  #}
+        <div class="form-group">
+            <label for="exampleInputEmail1"><b>Phone number</b></label><br>
+            <input type="tel" class="form-control col-md-2 col-md-offset-4" name="phone_number" placeholder="+380 050 00 00 000">
+        </div>
+
+        <div class="form-group">
+           <label for="exampleInputPassword1"><b>Password</b></label><br>
+           <input type="password" class="form-control col-md-2 col-md-offset-4 " name="password" placeholder="Password">
+       </div>
+
+    {#    Suggest for organisation to login, if it had created  #}
+        <p>You can <a href="{% url 'create_user_account' %}" class="button">registrate</a> yourself</p>
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+</div>
+{% endblock %}

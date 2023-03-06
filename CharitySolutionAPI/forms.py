@@ -1,5 +1,5 @@
 from .models import OrganisationPost, Organisation, User
-from django.forms import ModelForm, TextInput, Textarea
+from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInput
 
 
 class OrganisationPostForm(ModelForm):
@@ -45,7 +45,7 @@ class OrganisationForm(ModelForm):
             "telegram_nick",
             "instagram_nick",
             "organisation_site_url",
-            "organisation_logo",
+            "organisation_logo"
         ]
 
         widgets = {
@@ -102,7 +102,8 @@ class OrganisationForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ['date_of_birth', 'user_first_name', 'user_surname', 'user_patronymic_name', 'city', 'phone_number',
+                  'email', 'password']
         widgets = {
             "user_first_name": TextInput(
                 attrs={
@@ -138,6 +139,20 @@ class UserForm(ModelForm):
                     "class": "form-control  col-md-3",
                     "name": "phone_number",
                     "placeholder": "+380 050 00 00 000",
+                }
+            ),
+            "email": EmailInput(
+                attrs={
+                    "class": "form-control  col-md-3",
+                    "name": "email",
+                    "placeholder": "user@gmail.com",
+                }
+            ),
+            "password": PasswordInput(
+                attrs={
+                    "type": "password",
+                    "class": "form-control  col-md-3",
+                    "placeholder": "Password",
                 }
             ),
             "date_of_birth": TextInput(attrs={"type": "date"}),

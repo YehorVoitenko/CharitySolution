@@ -3,7 +3,7 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User as auth_user
 from django.db import IntegrityError
 
 from CharitySolutionAPI.decorators import (
@@ -12,8 +12,7 @@ from CharitySolutionAPI.decorators import (
     is_user_authenticated_with_organisation_id_param,
 )
 from CharitySolutionAPI.forms import OrganisationPostForm, OrganisationForm, UserForm
-from CharitySolutionAPI.models import OrganisationPost, Organisation
-from CharitySolutionAPI import models
+from CharitySolutionAPI.models import OrganisationPost, Organisation, User as model_user
 
 
 # JUST RENDERING OR REDIRECTING PAGES
@@ -35,7 +34,7 @@ def posts_list(request):
 def get_more_info_about_post(request, post_id):
     # Get one post from OrganisationPost, by added post id
     post = OrganisationPost.objects.get(id=post_id)
-    organisation = Organisation.objects.get(id=request.user.id)
+    organisation = Organisation.objects.get(client_id=request.user.id)
     return render(
         request,
         "posts/get_more_info_about_post.html",
@@ -70,7 +69,7 @@ def logout_organisation(request):
 def create_post(request):
     if request.method == "POST":
         form = OrganisationPostForm(request.POST, request.FILES)
-        organisation = Organisation.objects.get(pk=request.user.id)
+        organisation = Organisation.objects.get(client_id=request.user.id)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.organisation = organisation
@@ -143,7 +142,7 @@ def edit_organisation_account(request, organisation_id):
 
 @is_user_authenticated
 def get_account_view(request):
-    organisation = Organisation.objects.get(pk=request.user.id)
+    organisation = Organisation.objects.get(client_id=request.user.id)
     organisation_posts = OrganisationPost.objects.filter(
         organisation=request.user.id
     ).order_by("-date_created")
@@ -159,12 +158,12 @@ def create_organisation(request):
         try:
             organisation_name = request.POST["organisation_name"]
             password = request.POST["password"]
-            u = User(username=organisation_name)
-            Organisation.objects.create(organisation_name=organisation_name).save()
+            u = auth_user(username=organisation_name)
             u.set_password(password)
             u.is_superuser = True
             u.is_staff = True
             u.save()
+            Organisation.objects.create(organisation_name=organisation_name, client_id=u.id).save()
             login(
                 request,
                 authenticate(request, username=organisation_name, password=password),
@@ -179,13 +178,41 @@ def create_organisation(request):
 
 
 # USER VIEWS
-def registrate_user(request):
+def create_user_account(request):
     if request.method == "POST":
         form = UserForm(request.POST)
+        phone_number = request.POST["phone_number"]
+        password = request.POST["password"]
         if form.is_valid():
-            form.save()
+            user = auth_user(username=phone_number)
+            user.set_password(password)
+            user.is_superuser = False
+            user.is_staff = False
+            user.save()
+            client = user.id
+            obj = form.save(commit=False)
+            obj.client = client
+            obj.save()
+            login(
+                request,
+                authenticate(request, username=phone_number, password=password),
+            )
         return redirect("/get_posts_list")
     form = UserForm()
-    return render(
-        request, "user/create_user_account.html", {"form": form}
-    )
+    return render(request, "user/create_user_account.html", {"form": form})
+
+
+def login_user(request):
+    if request.method == "POST":
+        user = authenticate(
+            request,
+            username=request.POST["phone_number"],
+            password=request.POST["password"],
+        )
+        if user is not None:
+            login(request, user)
+            return redirect("/get_posts_list")
+        else:
+            return redirect("/error")
+    else:
+        return render(request, "user/login_user.html")

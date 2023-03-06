@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User as auth_user
 
 HELP_CATEGORIES = [
     ("Humanitarian aid", "Humanitarian aid"),
@@ -8,6 +9,7 @@ HELP_CATEGORIES = [
 
 
 class Organisation(models.Model):
+    client_id = models.IntegerField(null=True)
     organisation_name = models.CharField(max_length=100, unique=True)
     organisation_description = models.CharField(max_length=2000, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -40,12 +42,15 @@ class OrganisationPost(models.Model):
 
 
 class User(models.Model):
+    client = models.IntegerField(null=True)
     user_first_name = models.CharField(max_length=255, null=False)
     user_surname = models.CharField(max_length=255, null=False)
     user_patronymic_name = models.CharField(max_length=255, null=False)
-    date_of_birth = models.DateTimeField()
+    date_of_birth = models.DateTimeField(null=True, blank=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    phone_number = models.CharField(max_length=13)
+    phone_number = models.CharField(max_length=13, null=False)
+    email = models.EmailField(null=True, blank=True)
+    password = models.CharField(max_length=8, null=False)
 
     def __str__(self):
         return self.user_surname

@@ -21,10 +21,11 @@ urlpatterns = [
     # Login/Logout URLs
     path("login_organisation/", views.login_organisation, name="login_organisation"),
     path("logout_organisation/", views.logout_organisation, name="logout_organisation"),
+    path("login_user/", views.login_user, name="login_user"),
     # Creating URLs
     path("create_post/", views.create_post, name="create_post"),
     path("create_organisation/", views.create_organisation, name="create_organisation"),
-    path("registrate_user/", views.registrate_user, name="registrate_user"),
+    path("create_user_account/", views.create_user_account, name="create_user_account"),
     # Getting info URLs
     path("get_posts_list/", views.posts_list, name="get_posts_list"),
     path("get_account_view/", views.get_account_view, name="get_account_view"),
