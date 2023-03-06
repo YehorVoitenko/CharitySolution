@@ -11,7 +11,12 @@ from CharitySolutionAPI.decorators import (
     is_user_authenticated_with_post_id_param,
     is_user_authenticated_with_organisation_id_param,
 )
-from CharitySolutionAPI.forms import OrganisationPostForm, OrganisationForm, UserForm
+from CharitySolutionAPI.forms import (
+    OrganisationPostForm,
+    OrganisationForm,
+    UserForm,
+    LoginOrganisationForm,
+)
 from CharitySolutionAPI.models import OrganisationPost, Organisation
 
 
@@ -55,8 +60,9 @@ def login_organisation(request):
             return redirect("/get_posts_list")
         else:
             return redirect("/error")
-    else:
-        return render(request, "auth/login_organisation.html")
+
+    form = LoginOrganisationForm()
+    return render(request, "auth/login_organisation.html", {"form": form})
 
 
 def logout_current_client(request):
@@ -137,7 +143,7 @@ def edit_organisation_account(request, organisation_id):
         "email": organisation_info.email,
         "telegram_nick": organisation_info.telegram_nick,
         "instagram_nick": organisation_info.instagram_nick,
-        "organisation_site_url": organisation_info.organisation_site_url
+        "organisation_site_url": organisation_info.organisation_site_url,
     }
     form = OrganisationForm(initial=initial)
 
