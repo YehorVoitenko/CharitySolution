@@ -17,6 +17,7 @@ class TestAPI(TestCase):
             instagram_nick="instagram_nick",
             organisation_site_url="organisation_site_url",
             organisation_logo="test_logo",
+            client_id=self.test_user
         )
 
         self.create_organisation_post = OrganisationPost.objects.create(
@@ -34,6 +35,8 @@ class TestAPI(TestCase):
             city="test_sity",
             date_of_birth="2023-03-10 02:00:00+02",
             phone_number="+380661896330",
+            client_id=self.test_user
+
         )
 
         self.client.force_login(self.test_user)
