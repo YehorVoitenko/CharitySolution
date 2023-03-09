@@ -137,7 +137,7 @@ def edit_organisation_account(request, organisation_id):
         "email": organisation_info.email,
         "telegram_nick": organisation_info.telegram_nick,
         "instagram_nick": organisation_info.instagram_nick,
-        "organisation_site_url": organisation_info.organisation_site_url
+        "organisation_site_url": organisation_info.organisation_site_url,
     }
     form = OrganisationForm(initial=initial)
 
