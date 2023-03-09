@@ -9,7 +9,9 @@ from CharitySolutionAPI import models
 class TestAPI(TestCase):
     def setUp(self):
         # Create auth user, this case its organisation
-        self.create_auth_organisation = Auth_User.objects.create(username="organisation", is_superuser=True)
+        self.create_auth_organisation = Auth_User.objects.create(
+            username="organisation", is_superuser=True
+        )
 
         # Create organisation
         self.create_organisation = Organisation.objects.create(
@@ -51,16 +53,18 @@ class TestAPI(TestCase):
         self.client.force_login(self.create_auth_organisation)
 
         # TODO: Replace it by static method or by instance method
-        self.organisation = Organisation.objects.get(pk=self.create_auth_organisation.id)
+        self.organisation = Organisation.objects.get(
+            pk=self.create_auth_organisation.id
+        )
 
     # Method return rows from table
     @staticmethod
-    def get_values_from_db(db_name: 'QuerySet') -> dict:
+    def get_values_from_db(db_name: "QuerySet") -> dict:
         return list(db_name.objects.values())[0].values()
 
     # Method return columns from table
     @staticmethod
-    def get_keys_from_db(db_name: 'QuerySet') -> dict:
+    def get_keys_from_db(db_name: "QuerySet") -> dict:
         return list(db_name.objects.keys())[0].keys()
 
     def test_homepage(self):
