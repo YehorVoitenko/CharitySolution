@@ -172,7 +172,7 @@ def create_organisation_account(request):
             client.is_staff = True
             client.save()
             Organisation.objects.create(
-                organisation_name=organisation_name, client_id=client.id
+                organisation_name=organisation_name, client_id=client
             ).save()
             login(
                 request,
@@ -198,7 +198,7 @@ def create_user_account(request):
             client.set_password(password)
             client.save()
             temp_object = form.save(commit=False)
-            temp_object.client = client.id
+            temp_object.client_id = client
             temp_object.save()
             login(
                 request,

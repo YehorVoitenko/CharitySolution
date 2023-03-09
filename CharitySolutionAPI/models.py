@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User as auth_user
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 HELP_CATEGORIES = [
     ("Humanitarian aid", "Humanitarian aid"),
@@ -9,7 +11,7 @@ HELP_CATEGORIES = [
 
 
 class Organisation(models.Model):
-    client_id = models.IntegerField()
+    client_id = models.ForeignKey(User, on_delete=models.CASCADE)
     organisation_name = models.CharField(max_length=100, unique=True)
     organisation_description = models.CharField(max_length=2000, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -44,7 +46,7 @@ class OrganisationPost(models.Model):
 
 
 class User(models.Model):
-    client = models.IntegerField()
+    client_id = models.ForeignKey(User, on_delete=models.CASCADE)
     user_first_name = models.CharField(max_length=255, null=False)
     user_surname = models.CharField(max_length=255, null=False)
     user_patronymic_name = models.CharField(max_length=255, null=False)
