@@ -14,7 +14,7 @@
 
     {#  If something goes wrong and user is authenticated -- suggest to go to 'CreatePost' view #}
         {%  if user.is_authenticated %}
-        <form method="get" action="/add_post" >
+        <form method="get" action="/create_post" >
             <button type="submit" class="btn btn-secondary">Go back</button>
         </form>
 
