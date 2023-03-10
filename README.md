@@ -8,7 +8,7 @@ It's <b>Ukranian project</b>, the main purpose of which - couple charity organis
 <br>Moreover, they can registrate themself for easier registration in line of help, that charity organisation can provide.
 
 ## :hammer: Enviroment stack
-Python, Django, PostgreSQL, DjangoToolBar, black, Jinja, HTML, Bootstrap
+Python, Django, PostgreSQL, Docker, DjangoToolBar, black, Jinja, HTML, Bootstrap
 <br><br>
 
 ## :computer: Back-end features
