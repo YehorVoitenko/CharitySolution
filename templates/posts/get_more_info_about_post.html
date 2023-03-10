@@ -4,44 +4,43 @@
 
 {#   Deeper post view for better understanding by user   #}
 {% block content %}
-
     <div class="alert alert-warning" role="alert" id="center_form">
-        <h3>{{ post.post_title }}, by {{ organisation.organisation_name }}</h3><br>
+        <h3>{{ organisation_and_posts.post_title }}, by {{ organisation_and_posts.organisation.organisation_name }}</h3><br>
 
         <div align="left">
-            <h5><b>Description: </b>{{ post.post_text|linebreaks|wordwrap:10 }}</h5>
-            <h5><b>City:</b> <a>{{ post.city }}</a></h5>
-            <h5><b>Help category:</b> <a>{{ post.help_category }}</a></h5>
-            {% if post.meeting_date %}
-                <h5><b>Meeting date:</b> {{  post.meeting_date|date:"SHORT_DATE_FORMAT" }}</h5>
+            <h5><b>Description: </b>{{ organisation_and_posts.post_text|linebreaks|wordwrap:10 }}</h5>
+            <h5><b>City:</b> <a>{{ organisation_and_posts.city }}</a></h5>
+            <h5><b>Help category:</b> <a>{{ organisation_and_posts.help_category }}</a></h5>
+            {% if organisation_and_posts.meeting_date %}
+                <h5><b>Meeting date:</b> {{  organisation_and_posts.meeting_date|date:"SHORT_DATE_FORMAT" }}</h5>
             {% endif %}
-            {% if post.meeting_time %}
-                <h5><b>Meeting time:</b> {{ post.meeting_time }}</h5>
+            {% if organisation_and_posts.meeting_time %}
+                <h5><b>Meeting time:</b> {{ organisation_and_posts.meeting_time }}</h5>
             {% endif %}
         </div><br><br><br>
 
-        {% if post.file %}
-            <p> Also organisation added <a href="{{ post.file.url }}" download=""> file</a></p>
+        {% if organisation_and_posts.file %}
+            <p> Also organisation added <a href="{{ organisation_and_posts.file.url }}" download=""> file</a></p>
         {% endif %}
 
         <h5><b>Organisation contacts:</b></h5>
         <ul>
-            {% if organisation.telegram_nick %}
-                <li><b>Telegram:</b> <a>{{ organisation.telegram_nick }}</a></li>
+            {% if organisation_and_posts.organisation.telegram_nick %}
+                <li><b>Telegram:</b> <a>{{ organisation_and_posts.organisation.telegram_nick }}</a></li>
             {% endif %}
 
-            {% if organisation.instagram_nick %}
-                <li><a><b>Instagram:</b> {{ organisation.instagram_nick }}</a></li>
+            {% if organisation_and_posts.organisation.instagram_nick %}
+                <li><a><b>Instagram:</b> {{ organisation_and_posts.organisation.instagram_nick }}</a></li>
             {% endif %}
 
-            {% if organisation.email %}
-                <li><a><b>Email:</b>  {{ organisation.email }}</a></li>
+            {% if organisation_and_posts.organisation.email %}
+                <li><a><b>Email:</b>  {{ organisation_and_posts.organisation.email }}</a></li>
             {% endif %}
-            {% if organisation.organisation_site_url %}
-                <li><a><b>Site:</b> {{ organisation.organisation_site_url }}</a></li>
+            {% if organisation_and_posts.organisation.organisation_site_url %}
+                <li><a><b>Site:</b> {{ organisation_and_posts.organisation.organisation_site_url }}</a></li>
             {% endif %}
         </ul>
 
-        {{ post.date_created }}<br>
+        {{ organisation_and_posts.date_created }}<br>
     </div>
 {% endblock %}

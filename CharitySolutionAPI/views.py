@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -27,18 +26,22 @@ def get_homepage(request):
 # RESPONSE DATA FROM DB
 def get_posts_list(request):
     # Get all data from OrganisationPost, by inverted 'id'
-    post_data = OrganisationPost.objects.all().order_by("-id")
+    post_data = (
+        OrganisationPost.objects.all().order_by("-id").select_related("organisation")
+    )
+
     return render(request, "posts/posts_list.html", context={"context": post_data})
 
 
 def get_more_info_about_post(request, post_id):
     # Get one post from OrganisationPost, by added post id
-    post = OrganisationPost.objects.get(id=post_id)
-    organisation = Organisation.objects.get(client_id=post.organisation.client_id)
+    organisation_and_posts = OrganisationPost.objects.select_related(
+        "organisation"
+    ).get(id=post_id)
     return render(
         request,
         "posts/get_more_info_about_post.html",
-        {"post": post, "organisation": organisation},
+        {"organisation_and_posts": organisation_and_posts},
     )
 
 
@@ -84,7 +87,7 @@ def edit_organisation_post(request, post_id):
     post = OrganisationPost.objects.get(id=post_id)
 
     if request.method == "POST":
-        if request.user.id == post.organisation.client_id:
+        if request.user.id == post.organisation.client_id.id:
             instance = OrganisationPost.objects.get(id=post_id)
             form = OrganisationPostForm(request.POST, request.FILES, instance=instance)
             if form.is_valid():
@@ -114,7 +117,7 @@ def edit_organisation_post(request, post_id):
 # @is_user_authenticated_with_post_id_param
 def delete_organisation_post(request, post_id):
     post = OrganisationPost.objects.get(id=post_id)
-    if request.user.id == post.organisation.client_id:
+    if request.user.id == post.organisation.client_id.id:
         OrganisationPost.objects.get(id=post_id).delete()
         return redirect("/get_posts_list")
 
