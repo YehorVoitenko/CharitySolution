@@ -104,8 +104,6 @@ def edit_organisation_post(request, post_id):
             "post_title": post.post_title,
             "help_category": post.help_category,
             "city": post.city,
-            "meeting_time": post.meeting_time,
-            "meeting_date": post.meeting_date,
         }
     )
 
@@ -153,6 +151,13 @@ def edit_organisation_account(request, organisation_id):
 
 @is_user_authenticated
 def get_organisation_account_view(request):
+    # TODO: create view with this query. Can't add organisation_logo + fix problem with adding with info
+    # organisation_with_posts = OrganisationPost.objects.raw(
+    #     f'select * from public."CharitySolutionAPI_organisationpost" left join public."CharitySolutionAPI_organisation" '
+    #     f'on public."CharitySolutionAPI_organisationpost".organisation_id = public."CharitySolutionAPI_organisation".id '
+    #     f'where public."CharitySolutionAPI_organisation".client_id_id = {request.user.id};'
+    # )
+
     organisation = Organisation.objects.get(client_id=request.user.id)
     organisation_posts = OrganisationPost.objects.filter(
         organisation=organisation.id
