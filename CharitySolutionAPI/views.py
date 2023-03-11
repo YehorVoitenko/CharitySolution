@@ -20,7 +20,7 @@ def get_error(request):
 
 
 def get_homepage(request):
-    return render(request, "homepage.html")
+    return render(request, "common_pages/homepage.html")
 
 
 # RESPONSE DATA FROM DB
@@ -31,6 +31,13 @@ def get_posts_list(request):
     )
 
     return render(request, "posts/posts_list.html", context={"context": post_data})
+
+
+def get_organisation_bio(request, organisation_id):
+    organisation = Organisation.objects.get(client_id=organisation_id)
+    return render(
+        request, "common_pages/organisation_bio.html", {"organisation": organisation}
+    )
 
 
 def get_more_info_about_post(request, post_id):
@@ -129,7 +136,7 @@ def edit_organisation_account(request, organisation_id):
         form = OrganisationForm(request.POST, request.FILES, instance=organisation_info)
         if form.is_valid():
             form.save()
-            return redirect("/get_account_view")
+            return redirect("/get_organisation_account_view")
 
     initial = {
         "organisation_name": organisation_info.organisation_name,

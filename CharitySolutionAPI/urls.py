@@ -45,9 +45,14 @@ urlpatterns = [
     # Getting info URLs
     path("get_posts_list/", views.get_posts_list, name="get_posts_list"),
     path(
-        "get_account_view/",
+        "organisation_bio/<int:organisation_id>",
+        views.get_organisation_bio,
+        name="get_organisation_bio",
+    ),
+    path(
+        "get_organisation_account_view/",
         views.get_organisation_account_view,
-        name="get_account_view",
+        name="get_organisation_account_view",
     ),
     path("error/", views.get_error, name="error"),
     # Homepage URL

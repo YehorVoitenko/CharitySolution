@@ -80,7 +80,8 @@ class TestAPI(TestCase):
         self.assertEqual(response.status_code, 200)
 
         users_info_in_page = [
-            "test_title, by test_organisation",
+            "test_title",
+            "test_organisation",
             "test_city",
             "Another",
         ]
@@ -99,7 +100,7 @@ class TestAPI(TestCase):
 
         # Posting data to page
         response = self.client.post(
-            "/get_account_view/",
+            "/get_organisation_account_view/",
             data={
                 "organisation": self.organisation,
                 "organisation_posts": organisation_posts,

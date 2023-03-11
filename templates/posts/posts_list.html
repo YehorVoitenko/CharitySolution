@@ -11,7 +11,7 @@
 
             {% for post in context %}
                 <div align="center">
-                    <h2>{{ post.post_title }}, by {{ post.organisation.organisation_name }}</h2>
+                    <h2>{{ post.post_title }}, by <a href="{% url 'get_organisation_bio' organisation_id=post.organisation.pk %} ">{{ post.organisation.organisation_name }}</a></h2>
 
                     <div align="left">
                         <h6><b>Description: </b>{{ post.post_text|truncatechars:100}}</h6>

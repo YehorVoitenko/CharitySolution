@@ -1,0 +1,18 @@
+{% extends 'pattern_page.html' %}
+
+{% block title %} {{ organisation.organisation_name.capitalize }} {% endblock %}
+
+{% block content %}
+
+    <img src="{{ organisation.organisation_logo.url }}" width="500px" id="img"><br><br>
+            <h4><b>Name:</b> {{ organisation.organisation_name }}</h4>
+            <h4><b>Description:</b>{% if organisation.organisation_description %}<br>{{ organisation.organisation_description }}{% else %}...{% endif %}<br></h4>
+            <h4><b>City: </b>{% if organisation.city %}{{ organisation.city }}{% else %}...{% endif %}</h4>
+            <h4><b>Email: </b>{% if organisation.email %}{{ organisation.email }}{% else %}...{% endif %}</h4>
+            <h4><b>Telegram: </b>{% if organisation.telegram_nick %}{{ organisation.telegram_nick }}{% else %}...{% endif %}</h4>
+            <h4><b>Instagram: </b>{% if organisation.instagram_nick %}{{ organisation.instagram_nick }}{% else %}...{% endif %}</h4>
+            <h4><b>Site: </b>{% if organisation.organisation_site_url %}<a href="https://{{ organisation.organisation_site_url }}">{{ organisation.organisation_site_url }}</a>{% else %}...{% endif %}</h4>
+            <br><br>
+
+
+{% endblock %}
