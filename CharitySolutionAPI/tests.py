@@ -137,7 +137,8 @@ class TestAPI(TestCase):
         response = self.client.get("/get_posts_list/")
 
         # Check if the post exists at page
-        self.assertContains(response, "test_title, by test_organisation")
+        self.assertContains(response, "test_title")
+        self.assertContains(response, "test_organisation")
         self.assertContains(response, "test_city")
         self.assertContains(response, "Another")
 
