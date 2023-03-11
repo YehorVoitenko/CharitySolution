@@ -34,7 +34,7 @@ def get_posts_list(request):
 
 
 def get_organisation_bio(request, organisation_id):
-    organisation = Organisation.objects.get(client_id=organisation_id)
+    organisation = Organisation.objects.get(id=organisation_id)
     return render(
         request, "common_pages/organisation_bio.html", {"organisation": organisation}
     )
