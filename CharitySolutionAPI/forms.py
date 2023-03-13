@@ -5,8 +5,6 @@ from django.forms import (
     Textarea,
     EmailInput,
     PasswordInput,
-    Form,
-    CharField,
 )
 
 from django import forms
@@ -171,30 +169,4 @@ class UserForm(ModelForm):
                 }
             ),
             "date_of_birth": TextInput(attrs={"type": "date"}),
-        }
-
-
-class LoginOrganisationForm(forms.Form):
-    organisation_name = CharField(max_length=255)
-    password = CharField(max_length=255)
-
-    class Meta:
-        fields = ["organisation_name", "password"]
-        widgets = {
-            "organisation_name": TextInput(
-                attrs={
-                    "type": "text",
-                    "class": "form-control col-md-2 col-md-offset-4",
-                    "name": "organisation_name",
-                    "placeholder": "Name",
-                }
-            ),
-            "password": PasswordInput(
-                attrs={
-                    "type": "password",
-                    "class": "form-control col-md-2 col-md-offset-4",
-                    "name": "password",
-                    "placeholder": "Password",
-                }
-            ),
         }

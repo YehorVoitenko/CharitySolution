@@ -54,7 +54,6 @@ urlpatterns = [
         views.get_organisation_account_view,
         name="get_organisation_account_view",
     ),
-    path("error/", views.get_error, name="error"),
     # Homepage URL
     path("", views.get_homepage, name="homepage"),
     path("__debug__/", include("debug_toolbar.urls")),

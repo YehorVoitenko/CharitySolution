@@ -1,5 +1,4 @@
 from datetime import datetime
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User as Auth_user
@@ -14,14 +13,9 @@ from CharitySolutionAPI.forms import (
     OrganisationPostForm,
     OrganisationForm,
     UserForm,
-    LoginOrganisationForm,
 )
 from CharitySolutionAPI.models import OrganisationPost, Organisation
-
-
-# JUST RENDERING OR REDIRECTING PAGES
-def get_error(request):
-    return render(request, "error_pages/error.html")
+from CharitySolutionAPI.utils import handler401, handler400, handler403
 
 
 def get_homepage(request):
@@ -73,10 +67,9 @@ def login_organisation(request):
             login(request, organisation)
             return redirect("/get_posts_list")
         else:
-            return redirect("/error")
+            return handler401(request)
 
-    form = LoginOrganisationForm()
-    return render(request, "auth/login_organisation.html", {"form": form})
+    return render(request, "auth/login_organisation.html")
 
 
 def logout_current_client(request):
@@ -113,7 +106,7 @@ def edit_organisation_post(request, post_id):
                 temp_object.save()
                 return redirect("/get_posts_list")
         else:
-            return redirect("/error")
+            return handler403(request)
 
     form = OrganisationPostForm(
         initial={
@@ -205,9 +198,7 @@ def create_organisation_account(request):
             )
             return redirect("/get_posts_list")
         except IntegrityError:
-            return HttpResponse(
-                "<div align='center'><h1>Sorry, this organisation is already exists</h1></div>"
-            )
+            return handler401(request)
 
     return render(request, "organisation_account/create_organisation.html")
 
@@ -230,7 +221,7 @@ def create_user_account(request):
                 authenticate(request, username=phone_number, password=password),
             )
         else:
-            return redirect("/error")
+            return handler400(request)
         return redirect("/get_posts_list")
     form = UserForm()
     return render(request, "user/create_user_account.html", {"form": form})
@@ -247,6 +238,6 @@ def login_user(request):
             login(request, client)
             return redirect("/get_posts_list")
         else:
-            return redirect("/error")
+            return handler401(request)
     else:
         return render(request, "user/login_user.html")
