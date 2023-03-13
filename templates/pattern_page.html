@@ -18,6 +18,9 @@
         width: 100%;
         position: fixed;
       }
+      #img {
+        border-radius: 8px;
+      }
     </style>
 
 </head>
@@ -40,14 +43,14 @@
             </li>
 
             {# If organisation authenticated - 'Account' button appears #}
-            {% if request.path != '/get_account_view/' and request.user.is_superuser  %}
+            {% if request.path != '/get_organisation_account_view/' and request.user.is_superuser  %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'get_account_view' %}">Account</a>
+                    <a class="nav-link" href="{% url 'get_organisation_account_view' %}">Account</a>
                 </li>
             {% endif %}
 
             {# If organisation authenticated - 'Create Post'button appears #}
-            {% if request.path == '/get_account_view/' %}
+            {% if request.path == '/get_organisation_account_view/' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'create_post' %}">Create post</a>
                 </li>

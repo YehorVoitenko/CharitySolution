@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -26,24 +25,39 @@ def get_error(request):
 
 
 def get_homepage(request):
-    return render(request, "homepage.html")
+    return render(request, "common_pages/homepage.html")
 
 
 # RESPONSE DATA FROM DB
 def get_posts_list(request):
     # Get all data from OrganisationPost, by inverted 'id'
-    post_data = OrganisationPost.objects.all().order_by("-id")
+    post_data = (
+        OrganisationPost.objects.all().order_by("-id").select_related("organisation")
+    )
+
     return render(request, "posts/posts_list.html", context={"context": post_data})
+
+
+def get_organisation_bio(request, organisation_id):
+    organisation = Organisation.objects.get(id=organisation_id)
+    organisation_post = OrganisationPost.objects.filter(organisation_id=organisation_id)
+
+    return render(
+        request,
+        "common_pages/organisation_bio.html",
+        {"organisation": organisation, "organisation_post": organisation_post},
+    )
 
 
 def get_more_info_about_post(request, post_id):
     # Get one post from OrganisationPost, by added post id
-    post = OrganisationPost.objects.get(id=post_id)
-    organisation = Organisation.objects.get(client_id=post.organisation.client_id)
+    organisation_and_posts = OrganisationPost.objects.select_related(
+        "organisation"
+    ).get(id=post_id)
     return render(
         request,
         "posts/get_more_info_about_post.html",
-        {"post": post, "organisation": organisation},
+        {"organisation_and_posts": organisation_and_posts},
     )
 
 
@@ -90,7 +104,7 @@ def edit_organisation_post(request, post_id):
     post = OrganisationPost.objects.get(id=post_id)
 
     if request.method == "POST":
-        if request.user.id == post.organisation.client_id:
+        if request.user.id == post.organisation.client_id.id:
             instance = OrganisationPost.objects.get(id=post_id)
             form = OrganisationPostForm(request.POST, request.FILES, instance=instance)
             if form.is_valid():
@@ -107,8 +121,6 @@ def edit_organisation_post(request, post_id):
             "post_title": post.post_title,
             "help_category": post.help_category,
             "city": post.city,
-            "meeting_time": post.meeting_time,
-            "meeting_date": post.meeting_date,
         }
     )
 
@@ -120,7 +132,7 @@ def edit_organisation_post(request, post_id):
 # @is_user_authenticated_with_post_id_param
 def delete_organisation_post(request, post_id):
     post = OrganisationPost.objects.get(id=post_id)
-    if request.user.id == post.organisation.client_id:
+    if request.user.id == post.organisation.client_id.id:
         OrganisationPost.objects.get(id=post_id).delete()
         return redirect("/get_posts_list")
 
@@ -134,7 +146,7 @@ def edit_organisation_account(request, organisation_id):
         form = OrganisationForm(request.POST, request.FILES, instance=organisation_info)
         if form.is_valid():
             form.save()
-            return redirect("/get_account_view")
+            return redirect("/get_organisation_account_view")
 
     initial = {
         "organisation_name": organisation_info.organisation_name,
@@ -156,6 +168,13 @@ def edit_organisation_account(request, organisation_id):
 
 @is_user_authenticated
 def get_organisation_account_view(request):
+    # TODO: create view with this query. Can't add organisation_logo + fix problem with adding with info
+    # organisation_with_posts = OrganisationPost.objects.raw(
+    #     f'select * from public."CharitySolutionAPI_organisationpost" left join public."CharitySolutionAPI_organisation" '
+    #     f'on public."CharitySolutionAPI_organisationpost".organisation_id = public."CharitySolutionAPI_organisation".id '
+    #     f'where public."CharitySolutionAPI_organisation".client_id_id = {request.user.id};'
+    # )
+
     organisation = Organisation.objects.get(client_id=request.user.id)
     organisation_posts = OrganisationPost.objects.filter(
         organisation=organisation.id
@@ -178,7 +197,7 @@ def create_organisation_account(request):
             client.is_staff = True
             client.save()
             Organisation.objects.create(
-                organisation_name=organisation_name, client_id=client.id
+                organisation_name=organisation_name, client_id=client
             ).save()
             login(
                 request,
@@ -204,12 +223,14 @@ def create_user_account(request):
             client.set_password(password)
             client.save()
             temp_object = form.save(commit=False)
-            temp_object.client = client.id
+            temp_object.client_id = client
             temp_object.save()
             login(
                 request,
                 authenticate(request, username=phone_number, password=password),
             )
+        else:
+            return redirect("/error")
         return redirect("/get_posts_list")
     form = UserForm()
     return render(request, "user/create_user_account.html", {"form": form})

@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User as auth_user
+from django.contrib.auth import get_user_model
+from django.core.validators import RegexValidator
+
+User = get_user_model()
 
 HELP_CATEGORIES = [
     ("Humanitarian aid", "Humanitarian aid"),
@@ -9,14 +12,18 @@ HELP_CATEGORIES = [
 
 
 class Organisation(models.Model):
-    client_id = models.IntegerField()
+    client_id = models.ForeignKey(User, on_delete=models.CASCADE)
     organisation_name = models.CharField(max_length=100, unique=True)
     organisation_description = models.CharField(max_length=2000, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
-    email = models.EmailField(max_length=254, null=True, blank=True)
-    telegram_nick = models.CharField(max_length=100, null=True, blank=True)
-    instagram_nick = models.CharField(max_length=100, null=True, blank=True)
-    organisation_site_url = models.CharField(max_length=100, null=True, blank=True)
+    email = models.EmailField(max_length=254, null=True, blank=True, unique=True)
+    telegram_nick = models.CharField(max_length=100, null=True, blank=True, unique=True)
+    instagram_nick = models.CharField(
+        max_length=100, null=True, blank=True, unique=True
+    )
+    organisation_site_url = models.CharField(
+        max_length=100, null=True, blank=True, unique=True
+    )
     organisation_logo = models.FileField(
         null=True, blank=True, upload_to="organisation_logos"
     )
@@ -44,14 +51,18 @@ class OrganisationPost(models.Model):
 
 
 class User(models.Model):
-    client = models.IntegerField()
+    phone_regex = RegexValidator(regex=r"^\+?1?\d{10,13}$")
+
+    client_id = models.ForeignKey(User, on_delete=models.CASCADE)
     user_first_name = models.CharField(max_length=255, null=False)
     user_surname = models.CharField(max_length=255, null=False)
     user_patronymic_name = models.CharField(max_length=255, null=False)
     date_of_birth = models.DateTimeField(null=True, blank=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    phone_number = models.CharField(max_length=13, null=False)
-    email = models.EmailField(null=True, blank=True)
+    phone_number = models.CharField(
+        validators=[phone_regex], max_length=13, null=True, unique=True
+    )
+    email = models.EmailField(null=True, blank=True, unique=True)
     password = models.CharField(max_length=8, null=False)
 
     def __str__(self):
