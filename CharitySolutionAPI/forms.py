@@ -7,8 +7,6 @@ from django.forms import (
     PasswordInput,
 )
 
-from django import forms
-
 
 class OrganisationPostForm(ModelForm):
     class Meta:
