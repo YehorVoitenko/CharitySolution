@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User as Auth_user
 from django.db import IntegrityError
+from django.views import View
 
 from CharitySolutionAPI.decorators import (
     is_user_authenticated,
@@ -18,74 +19,82 @@ from CharitySolutionAPI.models import OrganisationPost, Organisation
 from CharitySolutionAPI.utils import handler401, handler400, handler403
 
 
-def get_homepage(request):
-    return render(request, "common_pages/homepage.html")
+class Homepage(View):
+    def get(self, request):
+        return render(request, "common_pages/homepage.html")
 
 
-# RESPONSE DATA FROM DB
-def get_posts_list(request):
-    return render(
-        request,
-        "posts/posts_list.html",
-        context={
-            "context": OrganisationPost.objects.all()
-            .order_by("-id")
-            .select_related("organisation")
-        },
-    )
-
-
-def get_organisation_bio(request, organisation_id):
-    return render(
-        request,
-        "common_pages/organisation_bio.html",
-        {
-            "organisation": get_object_or_404(Organisation, pk=organisation_id),
-            "organisation_post": OrganisationPost.objects.filter(
-                organisation_id=organisation_id
-            ),
-        },
-    )
-
-
-def get_more_info_about_post(request, post_id):
-    return render(
-        request,
-        "posts/get_more_info_about_post.html",
-        {
-            "organisation_and_posts": get_object_or_404(
-                OrganisationPost.objects.select_related("organisation"), pk=post_id
-            )
-        },
-    )
-
-
-# AUTH VIEWS
-def login_organisation(request):
-    if request.method == "POST":
-        organisation = authenticate(
+class Postline(View):
+    def get(self, request):
+        return render(
             request,
-            username=request.POST["organisation_name"],
-            password=request.POST["password"],
+            "posts/posts_list.html",
+            context={
+                "context": OrganisationPost.objects.all()
+                .order_by("-id")
+                .select_related("organisation")
+            },
         )
-        if organisation is not None:
-            login(request, organisation)
-            return redirect("/get_posts_list")
-        else:
-            return handler401(request)
-
-    return render(request, "auth/login_organisation.html")
 
 
-def logout_current_client(request):
-    logout(request)
-    return redirect("/")
+class OrganisationBio(View):
+    def get(self, request, organisation_id):
+        return render(
+            request,
+            "common_pages/organisation_bio.html",
+            {
+                "organisation": get_object_or_404(Organisation, pk=organisation_id),
+                "organisation_post": OrganisationPost.objects.filter(
+                    organisation_id=organisation_id
+                ),
+            },
+        )
 
 
-# POSTS: CREATING, DELETING, EDITING
-@is_user_authenticated
-def create_post(request):
-    if request.method == "POST":
+class PostInfo(View):
+    def get(self, request, post_id):
+        return render(
+            request,
+            "posts/get_more_info_about_post.html",
+            {
+                "organisation_and_posts": get_object_or_404(
+                    OrganisationPost.objects.select_related("organisation"), pk=post_id
+                )
+            },
+        )
+
+
+class LoginOrganisation(View):
+    def get(self, request):
+        return render(request, "auth/login_organisation.html")
+
+    def post(self, request):
+        if request.method == "POST":
+            organisation = authenticate(
+                request,
+                username=request.POST["organisation_name"],
+                password=request.POST["password"],
+            )
+            if organisation is not None:
+                login(request, organisation)
+                return redirect("/get_posts_list")
+            else:
+                return handler401(request)
+
+
+class LogOut(View):
+    def get(self, request):
+        logout(request)
+        return redirect("/")
+
+
+class CreatePost(View):
+    @is_user_authenticated
+    def get(self, request):
+        form = OrganisationPostForm()
+        return render(request, "posts/create_post.html", {"form": form})
+
+    def post(self, request):
         form = OrganisationPostForm(request.POST, request.FILES)
         if form.is_valid():
             temp_object = form.save(commit=False)
@@ -94,96 +103,109 @@ def create_post(request):
             )
             temp_object.save()
         return redirect("/get_posts_list")
-    form = OrganisationPostForm()
-    return render(request, "posts/create_post.html", {"form": form})
 
 
-@is_user_authenticated_with_post_id_param
-def edit_organisation_post(request, post_id):
-    post = get_object_or_404(OrganisationPost, pk=post_id)
+class EditOrganisationPost(View):
+    @is_user_authenticated_with_post_id_param
+    def get(self, request, post_id):
+        post = get_object_or_404(OrganisationPost, pk=post_id)
+        form = OrganisationPostForm(
+            initial={
+                "post_text": post.post_text,
+                "post_title": post.post_title,
+                "help_category": post.help_category,
+                "city": post.city,
+            }
+        )
 
-    if request.method == "POST":
+        return render(
+            request, "posts/edit_organisation_post.html", {"form": form, "post": post}
+        )
+
+    def post(self, request, post_id):
+        post = get_object_or_404(OrganisationPost, pk=post_id)
+        if request.method == "POST":
+            if request.user.id == post.organisation.client_id.id:
+                instance = OrganisationPost.objects.get(id=post_id)
+                form = OrganisationPostForm(
+                    request.POST, request.FILES, instance=instance
+                )
+                if form.is_valid():
+                    temp_object = form.save(commit=False)
+                    temp_object.date_updated = datetime.now()
+                    temp_object.save()
+                    return redirect("/get_posts_list")
+            else:
+                return handler403(request)
+
+
+class DeleteOrganisationPost(View):
+    @is_user_authenticated_with_post_id_param
+    def get(self, request, post_id):
+        post = get_object_or_404(OrganisationPost, pk=post_id)
+
         if request.user.id == post.organisation.client_id.id:
-            instance = OrganisationPost.objects.get(id=post_id)
-            form = OrganisationPostForm(request.POST, request.FILES, instance=instance)
-            if form.is_valid():
-                temp_object = form.save(commit=False)
-                temp_object.date_updated = datetime.now()
-                temp_object.save()
-                return redirect("/get_posts_list")
-        else:
-            return handler403(request)
+            OrganisationPost.objects.get(id=post_id).delete()
+            return redirect("/get_posts_list")
 
-    form = OrganisationPostForm(
-        initial={
-            "post_text": post.post_text,
-            "post_title": post.post_title,
-            "help_category": post.help_category,
-            "city": post.city,
+
+class EditOrganisationAccount(View):
+    @is_user_authenticated_with_organisation_id_param
+    def get(self, request, organisation_id):
+        organisation_info = get_object_or_404(Organisation, client_id=organisation_id)
+        initial = {
+            "organisation_name": organisation_info.organisation_name,
+            "organisation_description": organisation_info.organisation_description,
+            "city": organisation_info.city,
+            "email": organisation_info.email,
+            "telegram_nick": organisation_info.telegram_nick,
+            "instagram_nick": organisation_info.instagram_nick,
+            "organisation_site_url": organisation_info.organisation_site_url,
         }
-    )
+        form = OrganisationForm(initial=initial)
 
-    return render(
-        request, "posts/edit_organisation_post.html", {"form": form, "post": post}
-    )
+        return render(
+            request,
+            "organisation_account/edit_organisation_account.html",
+            {"form": form, "organisation_info": organisation_info},
+        )
+
+    def post(self, request, organisation_id):
+        organisation_info = get_object_or_404(Organisation, client_id=organisation_id)
+        if request.method == "POST":
+            form = OrganisationForm(
+                request.POST, request.FILES, instance=organisation_info
+            )
+            if form.is_valid():
+                form.save()
+                return redirect("/get_organisation_account_view")
 
 
-@is_user_authenticated_with_post_id_param
-def delete_organisation_post(request, post_id):
-    post = get_object_or_404(OrganisationPost, pk=post_id)
+class OrganisationAccountView(View):
+    @is_user_authenticated
+    def get(self, request):
+        organisation = get_object_or_404(Organisation, client_id=request.user.id)
 
-    if request.user.id == post.organisation.client_id.id:
-        OrganisationPost.objects.get(id=post_id).delete()
-        return redirect("/get_posts_list")
+        return render(
+            request,
+            "organisation_account/organisation_account_view.html",
+            {
+                "organisation": organisation,
+                "organisation_posts": OrganisationPost.objects.filter(
+                    organisation=organisation.id
+                ).order_by("-date_created"),
+            },
+        )
 
 
-# ORGANISATIONS CREATING, DELETING, EDITING
-@is_user_authenticated_with_organisation_id_param
-def edit_organisation_account(request, organisation_id):
-    organisation_info = get_object_or_404(Organisation, client_id=organisation_id)
-
-    if request.method == "POST":
-        form = OrganisationForm(request.POST, request.FILES, instance=organisation_info)
-        if form.is_valid():
-            form.save()
-            return redirect("/get_organisation_account_view")
-
-    initial = {
-        "organisation_name": organisation_info.organisation_name,
-        "organisation_description": organisation_info.organisation_description,
-        "city": organisation_info.city,
-        "email": organisation_info.email,
-        "telegram_nick": organisation_info.telegram_nick,
-        "instagram_nick": organisation_info.instagram_nick,
-        "organisation_site_url": organisation_info.organisation_site_url,
-    }
-    form = OrganisationForm(initial=initial)
-
-    return render(
+class CreateOrganisationAccount(View):
+    def get(
+        self,
         request,
-        "organisation_account/edit_organisation_account.html",
-        {"form": form, "organisation_info": organisation_info},
-    )
+    ):
+        return render(request, "organisation_account/create_organisation.html")
 
-
-@is_user_authenticated
-def get_organisation_account_view(request):
-    organisation = get_object_or_404(Organisation, client_id=request.user.id)
-
-    return render(
-        request,
-        "organisation_account/organisation_account_view.html",
-        {
-            "organisation": organisation,
-            "organisation_posts": OrganisationPost.objects.filter(
-                organisation=organisation.id
-            ).order_by("-date_created"),
-        },
-    )
-
-
-def create_organisation_account(request):
-    if request.method == "POST":
+    def post(self, request):
         try:
             organisation_name = request.POST["organisation_name"]
             password = request.POST["password"]
@@ -203,12 +225,12 @@ def create_organisation_account(request):
         except IntegrityError:
             return handler401(request)
 
-    return render(request, "organisation_account/create_organisation.html")
 
+class CreateUserAccount(View):
+    def get(self, request):
+        return render(request, "user/create_user_account.html", {"form": UserForm()})
 
-# USER VIEWS
-def create_user_account(request):
-    if request.method == "POST":
+    def post(self, request):
         form = UserForm(request.POST)
         phone_number = request.POST["phone_number"]
         password = request.POST["password"]
@@ -226,12 +248,13 @@ def create_user_account(request):
         else:
             return handler400(request)
         return redirect("/get_posts_list")
-    form = UserForm()
-    return render(request, "user/create_user_account.html", {"form": form})
 
 
-def login_user(request):
-    if request.method == "POST":
+class LoginUser(View):
+    def get(self, request):
+        return render(request, "user/login_user.html")
+
+    def post(self, request):
         client = authenticate(
             request,
             username=request.POST["phone_number"],
@@ -242,5 +265,3 @@ def login_user(request):
             return redirect("/get_posts_list")
         else:
             return handler401(request)
-    else:
-        return render(request, "user/login_user.html")
