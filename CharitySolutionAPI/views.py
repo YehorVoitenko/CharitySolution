@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User as Auth_user
 from django.db import IntegrityError
@@ -24,34 +24,39 @@ def get_homepage(request):
 
 # RESPONSE DATA FROM DB
 def get_posts_list(request):
-    # Get all data from OrganisationPost, by inverted 'id'
-    post_data = (
-        OrganisationPost.objects.all().order_by("-id").select_related("organisation")
+    return render(
+        request,
+        "posts/posts_list.html",
+        context={
+            "context": OrganisationPost.objects.all()
+            .order_by("-id")
+            .select_related("organisation")
+        },
     )
-
-    return render(request, "posts/posts_list.html", context={"context": post_data})
 
 
 def get_organisation_bio(request, organisation_id):
-    organisation = Organisation.objects.get(id=organisation_id)
-    organisation_post = OrganisationPost.objects.filter(organisation_id=organisation_id)
-
     return render(
         request,
         "common_pages/organisation_bio.html",
-        {"organisation": organisation, "organisation_post": organisation_post},
+        {
+            "organisation": get_object_or_404(Organisation, pk=organisation_id),
+            "organisation_post": OrganisationPost.objects.filter(
+                organisation_id=organisation_id
+            ),
+        },
     )
 
 
 def get_more_info_about_post(request, post_id):
-    # Get one post from OrganisationPost, by added post id
-    organisation_and_posts = OrganisationPost.objects.select_related(
-        "organisation"
-    ).get(id=post_id)
     return render(
         request,
         "posts/get_more_info_about_post.html",
-        {"organisation_and_posts": organisation_and_posts},
+        {
+            "organisation_and_posts": get_object_or_404(
+                OrganisationPost.objects.select_related("organisation"), pk=post_id
+            )
+        },
     )
 
 
@@ -82,10 +87,11 @@ def logout_current_client(request):
 def create_post(request):
     if request.method == "POST":
         form = OrganisationPostForm(request.POST, request.FILES)
-        organisation = Organisation.objects.get(client_id=request.user.id)
         if form.is_valid():
             temp_object = form.save(commit=False)
-            temp_object.organisation = organisation
+            temp_object.organisation = Organisation.objects.get(
+                client_id=request.user.id
+            )
             temp_object.save()
         return redirect("/get_posts_list")
     form = OrganisationPostForm()
@@ -94,7 +100,7 @@ def create_post(request):
 
 @is_user_authenticated_with_post_id_param
 def edit_organisation_post(request, post_id):
-    post = OrganisationPost.objects.get(id=post_id)
+    post = get_object_or_404(OrganisationPost, pk=post_id)
 
     if request.method == "POST":
         if request.user.id == post.organisation.client_id.id:
@@ -122,9 +128,10 @@ def edit_organisation_post(request, post_id):
     )
 
 
-# @is_user_authenticated_with_post_id_param
+@is_user_authenticated_with_post_id_param
 def delete_organisation_post(request, post_id):
-    post = OrganisationPost.objects.get(id=post_id)
+    post = get_object_or_404(OrganisationPost, pk=post_id)
+
     if request.user.id == post.organisation.client_id.id:
         OrganisationPost.objects.get(id=post_id).delete()
         return redirect("/get_posts_list")
@@ -133,7 +140,7 @@ def delete_organisation_post(request, post_id):
 # ORGANISATIONS CREATING, DELETING, EDITING
 @is_user_authenticated_with_organisation_id_param
 def edit_organisation_account(request, organisation_id):
-    organisation_info = Organisation.objects.get(client_id=organisation_id)
+    organisation_info = get_object_or_404(Organisation, client_id=organisation_id)
 
     if request.method == "POST":
         form = OrganisationForm(request.POST, request.FILES, instance=organisation_info)
@@ -161,21 +168,17 @@ def edit_organisation_account(request, organisation_id):
 
 @is_user_authenticated
 def get_organisation_account_view(request):
-    # TODO: create view with this query. Can't add organisation_logo + fix problem with adding with info
-    # organisation_with_posts = OrganisationPost.objects.raw(
-    #     f'select * from public."CharitySolutionAPI_organisationpost" left join public."CharitySolutionAPI_organisation" '
-    #     f'on public."CharitySolutionAPI_organisationpost".organisation_id = public."CharitySolutionAPI_organisation".id '
-    #     f'where public."CharitySolutionAPI_organisation".client_id_id = {request.user.id};'
-    # )
+    organisation = get_object_or_404(Organisation, client_id=request.user.id)
 
-    organisation = Organisation.objects.get(client_id=request.user.id)
-    organisation_posts = OrganisationPost.objects.filter(
-        organisation=organisation.id
-    ).order_by("-date_created")
     return render(
         request,
         "organisation_account/organisation_account_view.html",
-        {"organisation": organisation, "organisation_posts": organisation_posts},
+        {
+            "organisation": organisation,
+            "organisation_posts": OrganisationPost.objects.filter(
+                organisation=organisation.id
+            ).order_by("-date_created"),
+        },
     )
 
 
