@@ -223,6 +223,8 @@ def create_user_account(request):
                 request,
                 authenticate(request, username=phone_number, password=password),
             )
+        else:
+            return redirect("/error")
         return redirect("/get_posts_list")
     form = UserForm()
     return render(request, "user/create_user_account.html", {"form": form})
