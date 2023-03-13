@@ -3,8 +3,7 @@
 {% block title %} {{ organisation.organisation_name.capitalize }} {% endblock %}
 
 {% block content %}
-
-    <img src="{{ organisation.organisation_logo.url }}" width="500px" id="img"><br><br>
+            <img src="{{ organisation.organisation_logo.url }}" width="500px" id="img"><br><br>
             <h4><b>Name:</b> {{ organisation.organisation_name }}</h4>
             <h4><b>Description:</b>{% if organisation.organisation_description %}<br>{{ organisation.organisation_description }}{% else %}...{% endif %}<br></h4>
             <h4><b>City: </b>{% if organisation.city %}{{ organisation.city }}{% else %}...{% endif %}</h4>

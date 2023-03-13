@@ -25,7 +25,10 @@ class Organisation(models.Model):
         max_length=100, null=True, blank=True, unique=True
     )
     organisation_logo = models.FileField(
-        null=True, blank=True, upload_to="organisation_logos"
+        null=True,
+        blank=True,
+        upload_to="organisation_logos",
+        default="organisation_logos/default_logo/default_organisation_logo.jpeg",
     )
 
     def __str__(self):

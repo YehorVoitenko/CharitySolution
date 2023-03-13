@@ -7,10 +7,7 @@
     <div class="row">
         <div class="col">
 
-        {#    If oranisation added logo -- it will appear    #}
-            {% if organisation.organisation_logo %}
-                <img src="{{ organisation.organisation_logo.url}}" width="400px" id="img"><br><br>
-            {% endif %}
+            <img src="{{ organisation.organisation_logo.url}}" width="400px" id="img"><br><br>
 
         {#    Titels with organisation info    #}
             <h4><b>Name:</b> {{ organisation.organisation_name }}</h4>
