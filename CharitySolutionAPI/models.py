@@ -31,8 +31,15 @@ class Organisation(models.Model):
         default="organisation_logos/default_logo/default_organisation_logo.jpeg",
     )
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['client_id'], name='organisation_name_idx'),
+        ]
+
     def __str__(self):
         return self.organisation_name
+
+
 
 
 class OrganisationPost(models.Model):
