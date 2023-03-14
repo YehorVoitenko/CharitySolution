@@ -13,8 +13,8 @@ Python, Django, PostgreSQL, Docker, DjangoToolBar, black, Jinja, HTML, Bootstrap
 
 ## :computer: Back-end features
 - Optimized DB queries
-- FBV
-- docker-support: https://github.com/YehorVoitenko/CharitySolution_docker.git
+- Class Based View
+- Docker-support: https://github.com/YehorVoitenko/CharitySolution_docker.git
 - DjangoToolBar
 <br><br>
 
