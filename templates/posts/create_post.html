@@ -3,7 +3,7 @@
 {% block title %} Add post {% endblock %}
 
 {% block content %}
-<br>
+    <br>
     <div align="center">
 
         <h2>Add your post</h2>
@@ -20,11 +20,11 @@
             {{ form.help_category }}<br><br>
 
             <label>Meeting date:
-            {{ form.meeting_date }}&nbsp&nbsp
-            {{ form.meeting_time }}
+                {{ form.meeting_date }}&nbsp&nbsp
+                {{ form.meeting_time }}
             </label><br><br>
             {{ form.file }}
-             <input type="submit" class="btn btn-primary">
+            <input type="submit" class="btn btn-primary">
         </form>
     </div>
 {% endblock %}

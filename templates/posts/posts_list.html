@@ -2,7 +2,7 @@
 {% block title %} Postline {% endblock %}
 
 {% block content %}
-<br>
+    <br>
     {#  If there posts on website  #}
     {% if context %}
 
@@ -11,24 +11,29 @@
 
             {% for post in context %}
                 <div align="center">
-                    <h2>{{ post.post_title }}, by <a href="{% url 'get_organisation_bio' organisation_id=post.organisation.pk %} ">{{ post.organisation.organisation_name }}</a></h2>
+                    <label>
+                        <h2>{{ post.post_title }}, by <a
+                                href="{% url 'get_organisation_bio' organisation_id=post.organisation.pk %} ">{{ post.organisation.organisation_name }}</a>
+                        </h2></label>
 
+                    <input type="button" value="+">
                     <div align="left">
-                        <h6><b>Description: </b>{{ post.post_text|truncatechars:100}}</h6>
+                        <h6><b>Description: </b>{{ post.post_text|truncatechars:100 }}</h6>
                         <h6><b>City:</b> <a>{{ post.city }}</a></h6>
                         <h6><b>Help category:</b> <a>{{ post.help_category }}</a></h6>
 
                         {% if post.meeting_date %}
-                            <h6><b>Meeting date:</b>  <a>{{ post.meeting_date|date:"SHORT_DATE_FORMAT" }}</a> </h6>
+                            <h6><b>Meeting date:</b> <a>{{ post.meeting_date|date:"SHORT_DATE_FORMAT" }}</a></h6>
                         {% endif %}
 
                         {% if post.meeting_time %}
-                            <h6><b>Meeting time:</b>  <a>{{ post.meeting_time }}</a> </h6>
+                            <h6><b>Meeting time:</b> <a>{{ post.meeting_time }}</a></h6>
                         {% endif %}
                     </div>
 
-                    {% if post.file%}
-                        <p>Організація додала файл - встановити можна за  <a href="{{post.file.url}}" download><b>посиланням</b></a></p>
+                    {% if post.file %}
+                        <p>Організація додала файл - встановити можна за <a href="{{ post.file.url }}" download><b>посиланням</b></a>
+                        </p>
                     {% endif %}
                 </div>
 
@@ -40,14 +45,16 @@
                     {% if post.date_updated %}
                         <p><i>edited</i></p>
                     {% endif %}
-                </div><hr><br>
+                </div>
+                <hr><br>
             {% endfor %}
 
             {% else %}
 
-    {#  If there not posts on website  #}
+            {#  If there not posts on website  #}
             <div align="center">
-                <h3>Unfortunately, we don't have posts, so you can <a href="{% url 'create_post' %}"> create it)</a></h3>
+                <h3>Unfortunately, we don't have posts, so you can <a href="{% url 'create_post' %}"> create it)</a>
+                </h3>
             </div>
 
         </div>

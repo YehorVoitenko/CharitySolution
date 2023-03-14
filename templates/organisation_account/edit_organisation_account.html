@@ -11,12 +11,12 @@
             {% csrf_token %}
 
             {#     Edit organisation name    #}
-            <div class="col-sm-6" >
-                <label for="firstName" class="form-label" ><b>Organisation name</b></label>
+            <div class="col-sm-6">
+                <label for="firstName" class="form-label"><b>Organisation name</b></label>
                 {{ form.organisation_name }}<br>
 
                 {#     Edit organisation description    #}
-                <label for="firstName" class="form-label" ><b>Organisation description</b></label>
+                <label for="firstName" class="form-label"><b>Organisation description</b></label>
                 {{ form.organisation_description }}<br>
 
                 {#     Edit organisation city location    #}
@@ -34,19 +34,22 @@
                 <div class="input-group has-validation">
                     <span class="input-group-text">Telegram</span>
                     {{ form.telegram_nick }}
-                </div><br>
+                </div>
+                <br>
 
                 {#     Edit organisation instagram    #}
                 <div class="input-group has-validation">
                     <span class="input-group-text">Instagram</span>
                     {{ form.instagram_nick }}
-                </div><br>
+                </div>
+                <br>
 
                 {#     Edit organisation site    #}
                 <div class="input-group has-validation">
                     <span class="input-group-text">Site</span>
                     {{ form.organisation_site_url }}
-                </div><br>
+                </div>
+                <br>
 
 
                 {#     Form for adding organisation logo   #}
@@ -54,11 +57,12 @@
                     <label class="form-label"><b>Organisation logo</b><br><br>
                         {{ form.organisation_logo }}
                     </label>
-                </div><br>
+                </div>
+                <br>
 
 
                 {#     Submit changes and redirect to account view   #}
-                 <input type="submit" class="btn btn-primary" value="Save">
+                <input type="submit" class="btn btn-primary" value="Save">
 
             </div>
         </form>

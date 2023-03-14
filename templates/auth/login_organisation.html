@@ -3,28 +3,30 @@
 {% block title %} LogIn {% endblock %}
 
 {% block content %}
-<div align="center" id="login">
-    <form method="post">
-        {% csrf_token %}
+    <div align="center" id="login">
+        <form method="post">
+            {% csrf_token %}
 
-    {#  Forms for adding organisation name and password  #}
-        <div class="form-group">
-            <label><b>Organisation name</b></label><br>
-            <input type="text" class="form-control col-md-2 col-md-offset-4" name="organisation_name" placeholder="Name">
-            <br>
-            <br>
+            {#  Forms for adding organisation name and password  #}
+            <div class="form-group">
+                <label><b>Organisation name</b></label><br>
+                <input type="text" class="form-control col-md-2 col-md-offset-4" name="organisation_name"
+                       placeholder="Name">
+                <br>
+                <br>
 
-           <label><b>Password</b></label><br>
-           <input type="password" class="form-control col-md-2 col-md-offset-4 " name="password" placeholder="Password">
+                <label><b>Password</b></label><br>
+                <input type="password" class="form-control col-md-2 col-md-offset-4 " name="password"
+                       placeholder="Password">
 
-       </div>
+            </div>
 
-    {#    Suggest for organisation to login, if it had created  #}
-        <p>You can <a href="{% url 'create_organisation_account' %}" class="button">registrate</a> organisation</p>
+            {#    Suggest for organisation to login, if it had created  #}
+            <p>You can <a href="{% url 'create_organisation_account' %}" class="button">registrate</a> organisation</p>
 
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
 
-    </form>
-</div>
+        </form>
+    </div>
 {% endblock %}

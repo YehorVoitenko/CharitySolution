@@ -5,19 +5,21 @@
 {#   Deeper post view for better understanding by user   #}
 {% block content %}
     <div class="alert alert-dark" role="alert" id="center_form">
-        <h3>{{ organisation_and_posts.post_title }}, by {{ organisation_and_posts.organisation.organisation_name }}</h3><br>
+        <h3>{{ organisation_and_posts.post_title }}, by {{ organisation_and_posts.organisation.organisation_name }}</h3>
+        <br>
 
         <div align="left">
             <h5><b>Description: </b>{{ organisation_and_posts.post_text|linebreaks|wordwrap:10 }}</h5>
             <h5><b>City:</b> <a>{{ organisation_and_posts.city }}</a></h5>
             <h5><b>Help category:</b> <a>{{ organisation_and_posts.help_category }}</a></h5>
             {% if organisation_and_posts.meeting_date %}
-                <h5><b>Meeting date:</b> {{  organisation_and_posts.meeting_date|date:"SHORT_DATE_FORMAT" }}</h5>
+                <h5><b>Meeting date:</b> {{ organisation_and_posts.meeting_date|date:"SHORT_DATE_FORMAT" }}</h5>
             {% endif %}
             {% if organisation_and_posts.meeting_time %}
                 <h5><b>Meeting time:</b> {{ organisation_and_posts.meeting_time }}</h5>
             {% endif %}
-        </div><br><br><br>
+        </div>
+        <br><br><br>
 
         {% if organisation_and_posts.file %}
             <p> Also organisation added <a href="{{ organisation_and_posts.file.url }}" download=""> file</a></p>
@@ -34,7 +36,7 @@
             {% endif %}
 
             {% if organisation_and_posts.organisation.email %}
-                <li><a><b>Email:</b>  {{ organisation_and_posts.organisation.email }}</a></li>
+                <li><a><b>Email:</b> {{ organisation_and_posts.organisation.email }}</a></li>
             {% endif %}
             {% if organisation_and_posts.organisation.organisation_site_url %}
                 <li><a><b>Site:</b> {{ organisation_and_posts.organisation.organisation_site_url }}</a></li>

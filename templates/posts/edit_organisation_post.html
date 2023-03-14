@@ -6,23 +6,23 @@
     <div align="center" id="center_form">
 
         {# Check if current organisation is auth online #}
-         <form method="POST" enctype="multipart/form-data">
-             {% csrf_token %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-                 {{ form.post_title}}
-                 <br>
+            {{ form.post_title }}
+            <br>
 
-                 {{ form.post_text }}
-                 <br>
-                 {{ form.city }}
-                 <br><br>
-                 {{ form.help_category }}<br><br>
-                <label>{{ form.meeting_time }} {{ form.meeting_date }}</label>
-                <br><br>
-                 {{ form.file }}
-                 <input type="submit" class="btn btn-primary" value="Save">
+            {{ form.post_text }}
+            <br>
+            {{ form.city }}
+            <br><br>
+            {{ form.help_category }}<br><br>
+            <label>{{ form.meeting_time }} {{ form.meeting_date }}</label>
+            <br><br>
+            {{ form.file }}
+            <input type="submit" class="btn btn-primary" value="Save">
 
 
-            </form>
-        </div>
+        </form>
+    </div>
 {% endblock %}

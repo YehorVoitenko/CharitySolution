@@ -8,19 +8,21 @@
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
     <style>
-      #center_form {
-        top: 15%;
-        width: 100%;
-        position: fixed;
-      }
-      #login {
-        top: 15%;
-        width: 100%;
-        position: fixed;
-      }
-      #img {
-        border-radius: 8px;
-      }
+        #center_form {
+            top: 15%;
+            width: 100%;
+            position: fixed;
+        }
+
+        #login {
+            top: 15%;
+            width: 100%;
+            position: fixed;
+        }
+
+        #img {
+            border-radius: 8px;
+        }
     </style>
 
 </head>
@@ -31,7 +33,8 @@
     {# Logo 'CharitySolution' with redirecting to homepage #}
     <a class="navbar-brand" href="/"><b>CharitySolution</b></a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -43,7 +46,7 @@
             </li>
 
             {# If organisation authenticated - 'Account' button appears #}
-            {% if request.path != '/get_organisation_account_view/' and request.user.is_superuser  %}
+            {% if request.path != '/get_organisation_account_view/' and request.user.is_superuser %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'get_organisation_account_view' %}">Account</a>
                 </li>
@@ -62,7 +65,7 @@
                     <a class="nav-link" href="{% url 'login_user' %}">LogIn</a>
                 </li>
 
-            {# If organisation authenticated - it can 'Logout' #}
+                {# If organisation authenticated - it can 'Logout' #}
             {% elif request.user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout_current_client' %}">LogOut</a>

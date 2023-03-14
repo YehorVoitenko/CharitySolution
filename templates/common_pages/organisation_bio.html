@@ -3,27 +3,32 @@
 {% block title %} {{ organisation.organisation_name.capitalize }} {% endblock %}
 
 {% block content %}
-            <img src="{{ organisation.organisation_logo.url }}" width="500px" id="img"><br><br>
-            <h4><b>Name:</b> {{ organisation.organisation_name }}</h4>
-            <h4><b>Description:</b>{% if organisation.organisation_description %}<br>{{ organisation.organisation_description }}{% else %}...{% endif %}<br></h4>
-            <h4><b>City: </b>{% if organisation.city %}{{ organisation.city }}{% else %}...{% endif %}</h4>
-            <h4><b>Email: </b>{% if organisation.email %}{{ organisation.email }}{% else %}...{% endif %}</h4>
-            <h4><b>Telegram: </b>{% if organisation.telegram_nick %}{{ organisation.telegram_nick }}{% else %}...{% endif %}</h4>
-            <h4><b>Instagram: </b>{% if organisation.instagram_nick %}{{ organisation.instagram_nick }}{% else %}...{% endif %}</h4>
-            <h4><b>Site: </b>{% if organisation.organisation_site_url %}<a href="https://{{ organisation.organisation_site_url }}">{{ organisation.organisation_site_url }}</a>{% else %}...{% endif %}</h4>
-            <br><br>
-{{ post.meeting_date|date:"SHORT_DATE_FORMAT" }}
+    <img src="{{ organisation.organisation_logo.url }}" width="500px" id="img"><br><br>
+    <h4><b>Name:</b> {{ organisation.organisation_name }}</h4>
+    <h4><b>Description:</b>{% if organisation.organisation_description %}<br>
+        {{ organisation.organisation_description }}{% else %}...{% endif %}<br></h4>
+    <h4><b>City: </b>{% if organisation.city %}{{ organisation.city }}{% else %}...{% endif %}</h4>
+    <h4><b>Email: </b>{% if organisation.email %}{{ organisation.email }}{% else %}...{% endif %}</h4>
+    <h4><b>Telegram: </b>{% if organisation.telegram_nick %}{{ organisation.telegram_nick }}{% else %}...{% endif %}
+    </h4>
+    <h4><b>Instagram: </b>{% if organisation.instagram_nick %}{{ organisation.instagram_nick }}{% else %}...{% endif %}
+    </h4>
+    <h4><b>Site: </b>{% if organisation.organisation_site_url %}
+        <a href="https://{{ organisation.organisation_site_url }}">{{ organisation.organisation_site_url }}</a>{% else %}
+        ...{% endif %}</h4>
+    <br><br>
+    {{ post.meeting_date|date:"SHORT_DATE_FORMAT" }}
     {% for post in organisation_post %}
         <div class="alert alert-dark col-md-4 col-md-offset-4" role="alert" align="center">
             <h3>{{ post.post_title }}</h3>
             <h5>{{ post.post_text }}</h5>
             <p>{{ post.help_category }}</p>
             <p>м.{{ post.city.capitalize }}</p>
-            <label>{% if  post.meeting_date %}<b>{{ post.meeting_date|date:"SHORT_DATE_FORMAT" }}</b>{% endif %}{% if  post.meeting_time %}&emsp;&emsp;{{ post.meeting_time }}{% endif %}</label><br>
+            <label>{% if  post.meeting_date %}<b>{{ post.meeting_date|date:"SHORT_DATE_FORMAT" }}</b>{% endif %}
+                {% if  post.meeting_time %}&emsp;&emsp;{{ post.meeting_time }}{% endif %}</label><br>
             {% if post.file %} <a href="{{ post.file.url }}" download=""><b>Info file</b></a>{% endif %}<br><br>
             <small><i>{{ post.date_created }}</i></small>
             <a href="{% url 'get_more_info_about_post' post_id=post.id %}"><i>More</i></a>
-
 
 
         </div>
