@@ -32,7 +32,7 @@ class PostRoll(View):
             context={
                 "context": OrganisationPost.objects.all()
                 .order_by("-id")
-                .select_related("organisation"),
+                .select_related("organisation").prefetch_related('needy_people')
             },
         )
 
