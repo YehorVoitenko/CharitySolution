@@ -15,7 +15,7 @@ from CharitySolutionAPI.forms import (
     OrganisationForm,
     UserForm,
 )
-from CharitySolutionAPI.models import OrganisationPost, Organisation
+from CharitySolutionAPI.models import OrganisationPost, Organisation, User
 from CharitySolutionAPI.utils import handler401, handler400, handler403
 
 
@@ -32,12 +32,9 @@ class PostRoll(View):
             context={
                 "context": OrganisationPost.objects.all()
                 .order_by("-id")
-                .select_related("organisation")
+                .select_related("organisation"),
             },
         )
-
-    def post(self, request):
-        ...
 
 
 class OrganisationBio(View):
@@ -268,3 +265,13 @@ class LoginUser(View):
             return redirect("/get_post_roll")
         else:
             return handler401(request)
+
+
+class RegistrateNeedy(View):
+    def post(self, request, post_id):
+        if request.user.is_authenticated:
+            post = get_object_or_404(OrganisationPost, id=post_id)
+            post.needy_people.add(User.objects.get(client_id=request.user.id))
+            return redirect("/get_post_roll")
+        else:
+            return redirect("/login_user")

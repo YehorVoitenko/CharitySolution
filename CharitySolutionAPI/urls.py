@@ -59,6 +59,11 @@ urlpatterns = [
         views.OrganisationAccountView.as_view(),
         name="get_organisation_account_view",
     ),
+    path(
+        "registrate_for_help/<int:post_id>/",
+        views.RegistrateNeedy.as_view(),
+        name="registrate_for_help",
+    ),
     path("", views.Homepage.as_view(), name="homepage"),
     path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

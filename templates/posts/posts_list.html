@@ -11,13 +11,21 @@
 
             {% for post in context %}
                 <div align="center">
-                    <label>
-                        <h2>{{ post.post_title }}, by <a
-                                href="{% url 'get_organisation_bio' organisation_id=post.organisation.pk %} ">{{ post.organisation.organisation_name }}</a>
-                        </h2></label>
 
 
-                    &emsp;&emsp;<input type="button" value="+">
+                    <form method="post"
+                          action="{% url 'registrate_for_help' post_id=post.id %}">
+                        {% csrf_token %}
+                        <label>
+                            <h2>{{ post.post_title }}, by <a
+                                    href="{% url 'get_organisation_bio' organisation_id=post.organisation.pk %} ">{{ post.organisation.organisation_name }}</a>
+                            </h2>
+                        </label>
+                        <div align="right">
+                            &emsp;&emsp;<input type="submit" class="btn btn-primary btn-sm" value="Register">
+                        </div>
+                    </form>
+
                     <div align="left">
                         <h6><b>Description: </b>{{ post.post_text|truncatechars:100 }}</h6>
                         <h6><b>City:</b> <a>{{ post.city }}</a></h6>
@@ -39,6 +47,7 @@
                 </div>
 
                 <div align="center">
+                    <small><b>{{ post.needy_people.count }}</b> people were registered</small><br>
                     {{ post.date_created }}
 
                     <a href="{% url 'get_more_info_about_post' post_id=post.id %}" class="button">More</a>
