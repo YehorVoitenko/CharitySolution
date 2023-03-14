@@ -1,2 +1,3 @@
 media/
 CharitySolutionAPI/migrations/
+.env
