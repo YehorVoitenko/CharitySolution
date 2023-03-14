@@ -48,7 +48,7 @@ urlpatterns = [
         views.CreateUserAccount.as_view(),
         name="create_user_account",
     ),
-    path("get_posts_list/", views.Postline.as_view(), name="get_posts_list"),
+    path("get_post_roll/", views.PostRoll.as_view(), name="get_post_roll"),
     path(
         "organisation_bio/<int:organisation_id>",
         views.OrganisationBio.as_view(),

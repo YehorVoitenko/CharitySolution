@@ -1,5 +1,5 @@
 {% extends 'pattern_page.html' %}
-{% block title %} Postline {% endblock %}
+{% block title %} Post roll {% endblock %}
 
 {% block content %}
     <br>
@@ -16,7 +16,8 @@
                                 href="{% url 'get_organisation_bio' organisation_id=post.organisation.pk %} ">{{ post.organisation.organisation_name }}</a>
                         </h2></label>
 
-                    <input type="button" value="+">
+
+                    &emsp;&emsp;<input type="button" value="+">
                     <div align="left">
                         <h6><b>Description: </b>{{ post.post_text|truncatechars:100 }}</h6>
                         <h6><b>City:</b> <a>{{ post.city }}</a></h6>

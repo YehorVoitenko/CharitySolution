@@ -73,8 +73,8 @@ class TestAPI(TestCase):
         # Check response status code
         self.assertEqual(response.status_code, 200)
 
-    def test_postline_page(self):
-        response = self.client.get("/get_posts_list/")
+    def test_post_roll_page(self):
+        response = self.client.get("/get_post_roll/")
 
         # Check response status code
         self.assertEqual(response.status_code, 200)
@@ -116,8 +116,8 @@ class TestAPI(TestCase):
     def test_create_post(self):
         response = self.client.post("/create_post/")
 
-        # After success 'create_post' page it have to be redirected to 'get_posts_list'
-        self.assertEqual(response.url, "/get_posts_list")
+        # After success 'create_post' page it have to be redirected to 'get_post_roll'
+        self.assertEqual(response.url, "/get_post_roll")
 
     def test_organisation_creating_in_db(self):
         # Check if organisation was created
@@ -133,8 +133,8 @@ class TestAPI(TestCase):
         # Check if auth user was created
         self.assertTrue(models.User.objects.get(user_surname="test_user_surname"))
 
-    def test_postline(self):
-        response = self.client.get("/get_posts_list/")
+    def test_post_roll(self):
+        response = self.client.get("/get_post_roll/")
 
         # Check if the post exists at page
         self.assertContains(response, "test_title")

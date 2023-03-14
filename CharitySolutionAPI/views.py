@@ -24,7 +24,7 @@ class Homepage(View):
         return render(request, "common_pages/homepage.html")
 
 
-class Postline(View):
+class PostRoll(View):
     def get(self, request):
         return render(
             request,
@@ -35,6 +35,9 @@ class Postline(View):
                 .select_related("organisation")
             },
         )
+
+    def post(self, request):
+        ...
 
 
 class OrganisationBio(View):
@@ -77,7 +80,7 @@ class LoginOrganisation(View):
             )
             if organisation is not None:
                 login(request, organisation)
-                return redirect("/get_posts_list")
+                return redirect("/get_post_roll")
             else:
                 return handler401(request)
 
@@ -102,7 +105,7 @@ class CreatePost(View):
                 client_id=request.user.id
             )
             temp_object.save()
-        return redirect("/get_posts_list")
+        return redirect("/get_post_roll")
 
 
 class EditOrganisationPost(View):
@@ -134,7 +137,7 @@ class EditOrganisationPost(View):
                     temp_object = form.save(commit=False)
                     temp_object.date_updated = datetime.now()
                     temp_object.save()
-                    return redirect("/get_posts_list")
+                    return redirect("/get_post_roll")
             else:
                 return handler403(request)
 
@@ -146,7 +149,7 @@ class DeleteOrganisationPost(View):
 
         if request.user.id == post.organisation.client_id.id:
             OrganisationPost.objects.get(id=post_id).delete()
-            return redirect("/get_posts_list")
+            return redirect("/get_post_roll")
 
 
 class EditOrganisationAccount(View):
@@ -221,7 +224,7 @@ class CreateOrganisationAccount(View):
                 request,
                 authenticate(request, username=organisation_name, password=password),
             )
-            return redirect("/get_posts_list")
+            return redirect("/get_post_roll")
         except IntegrityError:
             return handler401(request)
 
@@ -247,7 +250,7 @@ class CreateUserAccount(View):
             )
         else:
             return handler400(request)
-        return redirect("/get_posts_list")
+        return redirect("/get_post_roll")
 
 
 class LoginUser(View):
@@ -262,6 +265,6 @@ class LoginUser(View):
         )
         if client is not None:
             login(request, client)
-            return redirect("/get_posts_list")
+            return redirect("/get_post_roll")
         else:
             return handler401(request)
