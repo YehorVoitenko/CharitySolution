@@ -33,7 +33,7 @@ class Organisation(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['client_id'], name='organisation_name_idx'),
+            models.Index(fields=['client_id'], name='client_id_idx'),
         ]
 
     def __str__(self):
