@@ -15,6 +15,7 @@ platformdirs==3.0.0
 psycopg2-binary==2.9.5
 pycodestyle==2.10.0
 pyflakes==3.0.1
+python-dotenv==1.0.0
 pytz==2022.7.1
 soupsieve==2.4
 sqlparse==0.4.3
