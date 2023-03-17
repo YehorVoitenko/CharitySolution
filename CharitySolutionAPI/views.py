@@ -32,7 +32,8 @@ class PostRoll(View):
             context={
                 "context": OrganisationPost.objects.all()
                 .order_by("-id")
-                .select_related("organisation").prefetch_related('needy_people')
+                .select_related("organisation")
+                .prefetch_related("needy_people")
             },
         )
 
@@ -275,3 +276,14 @@ class RegistrateNeedy(View):
             return redirect("/get_post_roll")
         else:
             return redirect("/login_user")
+
+
+class RegistrationInfoForOrganisation(View):
+    @is_user_authenticated_with_post_id_param
+    def get(self, request, post_id):
+        post = OrganisationPost.objects.filter(id=post_id)
+        return render(
+            request,
+            "common_pages/registration_info_for_organisation.html",
+            {"post": post},
+        )
