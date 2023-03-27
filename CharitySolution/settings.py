@@ -137,7 +137,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "console": {
-            "format": "[{module} {asctime} {levelname}] {message}",
+            "format": "[{asctime}] {message} ",
             "style": "{",
         },
     },
