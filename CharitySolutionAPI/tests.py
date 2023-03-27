@@ -12,6 +12,7 @@ class TestAPI(TestCase):
         self.create_auth_organisation = Auth_User.objects.create(
             username="organisation", is_superuser=True
         )
+        self.get_auth_organisation = Auth_User.objects.get(username="organisation")
 
         # Create organisation
         self.create_organisation = Organisation.objects.create(
@@ -23,12 +24,15 @@ class TestAPI(TestCase):
             instagram_nick="instagram_nick",
             organisation_site_url="organisation_site_url",
             organisation_logo="test_logo",
-            client_id=self.create_auth_organisation,
+            client_id=self.get_auth_organisation,
+        )
+        self.get_organisation = Organisation.objects.get(
+            organisation_name="test_organisation"
         )
 
         # Create organisation post
         self.create_organisation_post = OrganisationPost.objects.create(
-            organisation=self.create_organisation,
+            organisation=self.get_organisation,
             post_title="test_title",
             post_text="test_text",
             city="test_city",
@@ -36,6 +40,9 @@ class TestAPI(TestCase):
             date_created="2023-03-09 18:52:40.411183+02",
             meeting_date="2023-03-23 02:00:00+02",
             meeting_time="22:54:00",
+        )
+        self.get_organisation_post = OrganisationPost.objects.get(
+            post_title="test_title"
         )
 
         # Create ordinary site user
@@ -46,26 +53,17 @@ class TestAPI(TestCase):
             city="test_sity",
             date_of_birth="2023-03-10 02:00:00+02",
             phone_number="+380661896330",
-            client_id=self.create_auth_organisation,
+            client_id=self.get_auth_organisation,
         )
+        self.get_user = models.User.objects.get(user_surname="test_user_surname")
 
         # Force loging just by auth user
-        self.client.force_login(self.create_auth_organisation)
-
-        # TODO: Replace it by static method or by instance method
-        self.organisation = Organisation.objects.get(
-            pk=self.create_auth_organisation.id
-        )
+        self.client.force_login(self.get_auth_organisation)
 
     # Method return rows from table
     @staticmethod
     def get_values_from_db(db_name: "QuerySet") -> dict:
         return list(db_name.objects.values())[0].values()
-
-    # Method return columns from table
-    @staticmethod
-    def get_keys_from_db(db_name: "QuerySet") -> dict:
-        return list(db_name.objects.keys())[0].keys()
 
     def test_homepage(self):
         response = self.client.get("/")
@@ -95,14 +93,14 @@ class TestAPI(TestCase):
 
     def test_account_view(self):
         organisation_posts = OrganisationPost.objects.filter(
-            organisation=self.create_auth_organisation.id
+            organisation=self.get_auth_organisation.id
         ).order_by("-date_created")
 
         # Posting data to page
-        response = self.client.post(
+        response = self.client.get(
             "/get_organisation_account_view/",
             data={
-                "organisation": self.organisation,
+                "organisation": self.get_organisation,
                 "organisation_posts": organisation_posts,
             },
         )
@@ -119,20 +117,6 @@ class TestAPI(TestCase):
         # After success 'create_post' page it have to be redirected to 'get_post_roll'
         self.assertEqual(response.url, "/get_post_roll")
 
-    def test_organisation_creating_in_db(self):
-        # Check if organisation was created
-        organisation = Organisation.objects.get(organisation_name="test_organisation")
-        self.assertTrue(organisation)
-        return organisation
-
-    def test_post_creating_in_db(self):
-        # Check if organisation post was created
-        self.assertTrue(OrganisationPost.objects.get(post_title="test_title"))
-
-    def test_user_creating_in_db(self):
-        # Check if auth user was created
-        self.assertTrue(models.User.objects.get(user_surname="test_user_surname"))
-
     def test_post_roll(self):
         response = self.client.get("/get_post_roll/")
 
@@ -145,8 +129,6 @@ class TestAPI(TestCase):
         # Check if the button for getting more info is exists
         self.assertContains(response, "get_more_info_about_post")
 
-
-# TODO: recreate SQL requests, because every time created auth_user. CHECK BY: User.objects.values()
 
 # TODO: add testing for logout organisation and login user
 
