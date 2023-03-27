@@ -1,6 +1,6 @@
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User as Auth_User
-from django.test import TestCase
+from django.test import TestCase, Client
 
 from CharitySolutionAPI.models import OrganisationPost, Organisation
 from CharitySolutionAPI import models
@@ -8,11 +8,19 @@ from CharitySolutionAPI import models
 
 class TestAPI(TestCase):
     def setUp(self):
+        self.client = Client()
+
         # Create auth user, this case its organisation
         self.create_auth_organisation = Auth_User.objects.create(
             username="organisation", is_superuser=True
         )
         self.get_auth_organisation = Auth_User.objects.get(username="organisation")
+
+        # Create auth user, this case its just user
+        self.create_auth_organisation = Auth_User.objects.create(
+            username="user", is_superuser=False, is_staff=False
+        )
+        self.get_auth_user = Auth_User.objects.get(username="user")
 
         # Create organisation
         self.create_organisation = Organisation.objects.create(
@@ -129,7 +137,57 @@ class TestAPI(TestCase):
         # Check if the button for getting more info is exists
         self.assertContains(response, "get_more_info_about_post")
 
+    def test_user_logout(self):
+        self.client.get("/logout_current_client/")
+        response = self.client.get("/create_post/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Not enough privileges to perform an action")
 
-# TODO: add testing for logout organisation and login user
+    def test_login_navbar_elements_organisation_view(self):
+        self.client.logout()
+        self.client.force_login(self.get_auth_organisation)
+        homepage_response = self.client.get("/")
+        self.assertContains(
+            homepage_response,
+            '<a class="nav-link" href="/get_organisation_account_view/">Account</a>',
+        )
+        self.assertContains(
+            homepage_response,
+            ' <a class="nav-link" href="/logout_current_client/">LogOut</a>',
+        )
+        self.assertContains(
+            homepage_response,
+            ' <a class="nav-link" href="/get_post_roll/">Wall<span class="sr-only">(current)</span></a>',
+        )
 
-# TODO: check if navbar changing by login user or login organisation
+    def test_logout_navbar_elements(self):
+        self.client.logout()
+        homepage_response = self.client.get("/")
+        self.assertNotContains(
+            homepage_response,
+            '<a class="nav-link" href="/get_organisation_account_view/">Account</a>',
+        )
+        self.assertNotContains(
+            homepage_response,
+            ' <a class="nav-link" href="/logout_current_client/">LogOut</a>',
+        )
+        self.assertContains(
+            homepage_response,
+            ' <a class="nav-link" href="/get_post_roll/">Wall<span class="sr-only">(current)</span></a>',
+        )
+        self.assertContains(
+            homepage_response, ' <a class="nav-link" href="/login_user/">LogIn</a>'
+        )
+
+    def test_organisation_bio(self):
+        response = self.client.get(f"/organisation_bio/{self.get_organisation.id}")
+        self.assertContains(response, f"<h4><b>Name:</b> test_organisation</h4>")
+        self.assertContains(response, "test_organisation_description<br></h4>")
+        self.assertContains(response, "<h4><b>City: </b>test_city</h4>")
+        self.assertContains(response, "<h4><b>Email: </b>email</h4>")
+        self.assertContains(response, "<h4><b>Telegram: </b>telegram_nick\n    </h4>")
+        self.assertContains(response, "<h4><b>Instagram: </b>instagram_nick\n    </h4>")
+        self.assertContains(
+            response,
+            '<h4><b>Site: </b>\n        <a href="https://organisation_site_url">organisation_site_url</a></h4>',
+        )
