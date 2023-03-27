@@ -70,5 +70,6 @@ urlpatterns = [
         name="registration_info_for_organisation",
     ),
     path("", views.Homepage.as_view(), name="homepage"),
+    path("download_pdf/<int:post_id>", views.download_pdf, name="download_pdf"),
     path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

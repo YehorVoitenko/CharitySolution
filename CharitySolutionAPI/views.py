@@ -1,3 +1,7 @@
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -287,3 +291,17 @@ class RegistrationInfoForOrganisation(View):
             "common_pages/registration_info_for_organisation.html",
             {"post": post},
         )
+
+
+def download_pdf(request, post_id):
+    post = OrganisationPost.objects.filter(id=post_id)
+    template_path = "create_pdf_file.html"
+    context = {"my_data": post}
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="registered_people.pdf"'
+    template = get_template(template_path)
+    html = template.render(context)
+    pdf = pisa.CreatePDF(BytesIO(html.encode("UTF-8")), response)
+    if not pdf.err:
+        return response
+    return HttpResponse("Error generating PDF file.")
