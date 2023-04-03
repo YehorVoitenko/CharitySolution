@@ -293,15 +293,16 @@ class RegistrationInfoForOrganisation(View):
         )
 
 
-def download_pdf(request, post_id):
-    post = OrganisationPost.objects.filter(id=post_id)
-    template_path = "create_pdf_file.html"
-    context = {"my_data": post}
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="registered_people.pdf"'
-    template = get_template(template_path)
-    html = template.render(context)
-    pdf = pisa.CreatePDF(BytesIO(html.encode("UTF-8")), response)
-    if not pdf.err:
-        return response
-    return HttpResponse("Error generating PDF file.")
+class CreatePDF(View):
+    def get(self, request, post_id):
+        post = OrganisationPost.objects.filter(id=post_id)
+        template_path = "create_pdf_file.html"
+        context = {"my_data": post}
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = f'attachment; filename="registered_people.pdf"'
+        template = get_template(template_path)
+        html = template.render(context)
+        pdf = pisa.CreatePDF(BytesIO(html.encode("utf-8")), response)
+        if not pdf.err:
+            return response
+        return HttpResponse("Error generating PDF file.")
